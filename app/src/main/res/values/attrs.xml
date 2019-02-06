@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="RangePickerView">
+        <attr name="backgroundSelectedTint" format="color" />
+        <attr name="backgroundStripTint" format="color" />
+        <attr name="textColorOnSelected" format="color" />
+        <attr name="textColorOnSurface" format="color" />
+        <attr name="cornerRadius" format="dimension" />
+        <attr name="stripThickness" format="dimension" />
+        <attr name="extraPadding" format="dimension" />
+        <attr name="android:textSize" />
+        <attr name="android:fontFamily" />
+    </declare-styleable>
+</resources>
