@@ -98,129 +98,6 @@ class RangePickerView : View {
         )
     }
 
-    /*override fun onDraw(canvas: Canvas?) {
-        super.onDraw(canvas)
-
-        canvas?.translate(100f, 100f)
-
-        var previousLeftPosition = 0f
-        var previousRightPosition = 0f
-        var centerFirst: RectF? = null
-        var centerSecond: RectF? = null
-        options.forEachIndexed { index, pair ->
-            //            if (pair.second.isSelected) {
-
-            val text = options[index].first.getOption()
-            val widthOfText = whiteTextPaint.measureText(text)
-
-            val rect = pair.second.rectF
-            if (index != 0) {
-//                rect.left += previousLeftPosition
-//                rect.right += previousRightPosition
-            } else {
-            }
-
-            if (pair.second.isSelected) {
-//                canvas?.drawRoundRect(
-//                    rect.left - extraPadding,
-//                    rect.top - extraPadding,
-//                    rect.right + extraPadding,
-//                    rect.bottom + extraPadding,
-//                    pair.second.cornerRadius,
-//                    pair.second.cornerRadius,
-//                    rectangleBackgroundPaint
-//                )
-//
-//                canvas?.drawText(
-//                    text,
-//                    rect.centerX(),
-//                    rect.centerY() + rect.height() / 2,
-//                    whiteTextPaint
-//                )
-
-                if (selectedFirstIndex == -1) {
-                    centerFirst = rect
-                    selectedFirstIndex = index
-                } else {
-                    centerSecond = rect
-                    selectedSecondIndex = index
-                }
-            } else {
-                canvas?.drawRoundRect(
-                    rect.left - extraPadding,
-                    rect.top - extraPadding,
-                    rect.right + extraPadding,
-                    rect.bottom + extraPadding,
-                    0.5f * sqrt((rect.width() * rect.width() + rect.height() * rect.height())),
-                    0.5f * sqrt((rect.width() * rect.width() + rect.height() * rect.height())),
-                    rectangleBackgroundTransparentPaint
-                )
-
-                canvas?.drawText(
-                    text,
-                    rect.centerX(),
-                    rect.centerY() + rect.height() / 2,
-                    blackTextPaint
-                )
-
-                previousLeftPosition += widthOfText * index + 1
-                previousRightPosition += widthOfText * index + 1
-            }
-
-//                canvas?.drawCircle(
-//                    rectF.centerX(),
-//                    rectF.centerY(),
-//                    0.5f * sqrt((rectF.width() * rectF.width() + rectF.height() * rectF.height()) * 1f),
-//                    lineBackgroundPaint
-//                )
-//                canvas?.drawCircle(width -100f, 100f, 60f, rectangleBackgroundPaint)
-
-
-            if (selectedFirstIndex != -1 && selectedSecondIndex != -1) {
-                val first = options[selectedFirstIndex]
-                val second = options[selectedSecondIndex]
-
-                canvas?.drawRect(
-                    first.second.rectF.centerX(),
-                    first.second.rectF.centerY(),
-                    first.second.rectF.centerX(),
-                    first.second.rectF.centerY(),
-                    lineBackgroundPaint
-                )
-
-                canvas?.drawRect(
-                    second.second.rectF.centerX(),
-                    second.second.rectF.centerY(),
-                    second.second.rectF.centerX(),
-                    second.second.rectF.centerY(),
-                    lineBackgroundPaint
-                )
-
-                canvas?.drawRoundRect(
-                    first.second.rectF.left - extraPadding,
-                    first.second.rectF.top - extraPadding,
-                    first.second.rectF.right + extraPadding,
-                    first.second.rectF.bottom + extraPadding,
-                    0.5f * sqrt((first.second.rectF.width() * first.second.rectF.width() + first.second.rectF.height() * first.second.rectF.height())),
-                    0.5f * sqrt((first.second.rectF.width() * first.second.rectF.width() + first.second.rectF.height() * first.second.rectF.height())),
-                    rectangleBackgroundPaint
-                )
-
-                canvas?.drawRoundRect(
-                    second.second.rectF.left - extraPadding,
-                    second.second.rectF.top - extraPadding,
-                    second.second.rectF.right + extraPadding,
-                    second.second.rectF.bottom + extraPadding,
-                    0.5f * sqrt((second.second.rectF.width() * second.second.rectF.width() + second.second.rectF.height() * second.second.rectF.height())),
-                    0.5f * sqrt((second.second.rectF.width() * second.second.rectF.width() + second.second.rectF.height() * second.second.rectF.height())),
-                    rectangleBackgroundPaint
-                )
-            }
-        }
-
-        }
-    }*/
-
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         // TODO: add measure to handle padding/margin/wrap_content etc.
@@ -255,7 +132,7 @@ class RangePickerView : View {
             previousTextWidth = translateWidth
 
             //default selected rectangles
-            if (pair.second.isSelected) {
+            if (pair.second.isSelected && isFirstDraw) {
                 if (selectedCount == 0) {
                     selectedFirstIndex = index
                     firstSelectedRect.set(coordinateRect)
@@ -298,6 +175,8 @@ class RangePickerView : View {
     }
 
     private fun drawSelectedBackgrounds(canvas: Canvas?) {
+        if (selectedFirstIndex == -1 || selectedSecondIndex == -1) return
+
         val first = firstSelectedRect
         val second = secondSelectedRect
 
@@ -346,129 +225,6 @@ class RangePickerView : View {
         }
     }
 
-    /*fun old(canvas: Canvas?) {
-        var previousPosition = 0f
-        var selectedCount = 0
-        //calculate  selected indexes
-        options.forEachIndexed { index, pair ->
-            val text = options[index].first.getOption()
-            val widthOfText = whiteTextPaint.measureText(text)
-            val rect = pair.second.coordinateRect
-            previousPosition = (widthOfText + extraPadding) * index
-
-            if (pair.second.isSelected) {
-                if (selectedCount == 0) {
-                    firstSelectedRect.set(rect)
-                    selectedFirstIndex = index
-                } else {
-                    secondSelectedRect.set(rect)
-                    selectedSecondIndex = index
-                }
-                selectedCount++
-            }
-        }
-
-
-//        // draw bg line
-//        canvas?.drawRect(
-//            whiteTextPaint.measureText(firstSelectedText) * selectedFirstIndex + 1 + extraPadding,
-//            firstSelectedRect.top + extraPadding,
-//            whiteTextPaint.measureText(secondSelectedText) * selectedSecondIndex + 1 + whiteTextPaint.measureText(
-//                secondSelectedText
-//            ) - extraPadding,
-//            firstSelectedRect.bottom - extraPadding,
-//            lineBackgroundPaint
-//        )
-
-        // draw not selected
-        options.forEachIndexed { index, pair ->
-            val text = options[index].first.getOption()
-            val widthOfText = whiteTextPaint.measureText(text)
-            val rect = pair.second.coordinateRect
-            previousPosition = (widthOfText + extraPadding) * index
-
-            if (!pair.second.isSelected) {
-                // transparent rect for text
-                canvas?.drawRoundRect(
-                    previousPosition - extraPadding,
-                    rect.top - extraPadding,
-                    previousPosition + widthOfText + extraPadding,
-                    rect.bottom + extraPadding,
-                    defaultCornerRadius,
-                    defaultCornerRadius,
-                    rectangleBackgroundTransparentPaint
-                )
-
-                // text
-                canvas?.drawText(
-                    text,
-                    previousPosition + rect.width() / 2,
-                    rect.centerY() + rect.height() / 2,
-                    blackTextPaint
-                )
-            }
-//        }
-
-            // draw first selected item
-//        if (selectedCount == 2) {
-//            val text = firstSelectedText
-//            val widthOfText = whiteTextPaint.measureText(text)
-//            val rect = firstSelectedRect
-//            previousPosition = (widthOfText + extraPadding) * selectedFirstIndex
-
-
-            // selected draw
-//            canvas?.drawRoundRect(
-//                previousPosition - extraPadding,
-//                rect.top - extraPadding,
-//                previousPosition + widthOfText + extraPadding,
-//                rect.bottom + extraPadding,
-//                defaultCornerRadius,
-//                defaultCornerRadius,
-//                rectangleBackgroundPaint
-//            )
-
-//            // text
-//            canvas?.drawText(
-//                text,
-//                previousPosition + rect.width() / 2,
-//                rect.centerY() + rect.height() / 2,
-//                whiteTextPaint
-//            )
-//            selectedCount--
-//        }
-
-            // draw second selected item
-//        if (selectedCount == 1) {
-//            val text = secondSelectedText
-//            val widthOfText = whiteTextPaint.measureText(text)
-//            val rect = secondSelectedRect
-//            previousPosition = (widthOfText + extraPadding) * selectedSecondIndex
-//
-//
-//            // selected draw
-//            canvas?.drawRoundRect(
-//                previousPosition - extraPadding,
-//                rect.top - extraPadding,
-//                previousPosition + widthOfText + extraPadding,
-//                rect.bottom + extraPadding,
-//                defaultCornerRadius,
-//                defaultCornerRadius,
-//                rectangleBackgroundPaint
-//            )
-//
-//            // text
-//            canvas?.drawText(
-//                text,
-//                previousPosition + rect.width() / 2,
-//                rect.centerY() + rect.height() / 2,
-//                whiteTextPaint
-//            )
-//
-//            selectedCount--
-        }
-    }*/
-
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         return when (event?.action) {
             MotionEvent.ACTION_DOWN -> {
@@ -482,8 +238,10 @@ class RangePickerView : View {
                         if (!isSingleClickHappened) {
                             firstSelectedRect.set(selectedRect.coordinateRect)
                             secondSelectedRect.set(selectedRect.coordinateRect)
-                            options[selectedFirstIndex].second.isSelected = false
-                            options[selectedSecondIndex].second.isSelected = false
+                            if (selectedFirstIndex != -1 || selectedSecondIndex != -1) {
+                                options[selectedFirstIndex].second.isSelected = false
+                                options[selectedSecondIndex].second.isSelected = false
+                            }
 
                             selectedFirstIndex = index
                             selectedRect.isSelected = true
