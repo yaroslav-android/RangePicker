@@ -19,8 +19,6 @@ import yaroslav.ovdiienko.idivision.rangepicker.R
 import yaroslav.ovdiienko.idivision.rangepicker.rangepicker.model.Option
 import yaroslav.ovdiienko.idivision.rangepicker.rangepicker.model.RectShape
 import yaroslav.ovdiienko.idivision.rangepicker.util.DisplayUtils
-import kotlin.math.abs
-import kotlin.math.min
 
 
 class RangePickerView : View {
@@ -153,15 +151,42 @@ class RangePickerView : View {
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-        // TODO: add measure to handle padding/margin/wrap_content etc.
-        measuredViewPadding = (measuredWidth - bounds).toFloat() / options.size
+        minimumHeight = displayUtils.convertDpToPx(DEFAULT_MIN_HEIGHT)
+        val desiredWidth = suggestedMinimumWidth + paddingLeft + paddingRight
+        val desiredHeight = suggestedMinimumHeight + paddingTop + paddingBottom
+
+        setMeasuredDimension(measureDimension(desiredWidth, widthMeasureSpec),
+                measureDimension(desiredHeight, heightMeasureSpec))
+        measuredViewPadding = (measuredWidth - bounds).toFloat() / options.size + 1
         calculateCoordinateRectangles()
     }
 
+    private fun measureDimension(desiredSize: Int, measureSpec: Int): Int {
+        var result: Int
+        val specMode = View.MeasureSpec.getMode(measureSpec)
+        val specSize = View.MeasureSpec.getSize(measureSpec)
+
+        if (specMode == View.MeasureSpec.EXACTLY) {
+            result = specSize
+        } else {
+            result = desiredSize
+            if (specMode == View.MeasureSpec.AT_MOST) {
+                result = Math.min(result, specSize)
+            }
+        }
+
+        if (result < desiredSize) {
+            Log.wtf("DEBUG", "The view is too small, the content might get cut")
+        }
+        return result
+    }
+
     private fun calculateCoordinateRectangles() {
-        var previousTextWidth = 0f
+        var previousRight = 0f
         var selectedCount = 0
+        val size = options.size - 1
+        val halfPadding = extraPadding / 2
+        val raiseOfTwoPadding = extraPadding * 2
 
         options.forEachIndexed { index, pair ->
             // TODO: fix bug with different text size and strange padding between texts
@@ -169,21 +194,22 @@ class RangePickerView : View {
             val widthOfText = textPaint.measureText(text)
 
             val coordinateRect = pair.second.coordinateRect
-            val translateWidth = ((widthOfText + measuredViewPadding) * index)
-            val currentMarginFromPrevious = abs(translateWidth - previousTextWidth) / 2
-            val newTranslatedWidth = translateWidth + currentMarginFromPrevious
 
-            coordinateRect.top = measuredHeight / 10f
-            coordinateRect.bottom = measuredHeight / 2f
-            if (index == 0) {
-                coordinateRect.left = extraPadding
-                coordinateRect.right = widthOfText + newTranslatedWidth
+            coordinateRect.top = halfPadding
+            coordinateRect.bottom = measuredHeight.toFloat() - halfPadding
+
+            coordinateRect.left = if (index == 0) {
+                halfPadding
             } else {
-                coordinateRect.left = newTranslatedWidth
-                coordinateRect.right = widthOfText + newTranslatedWidth + extraPadding
+                measuredViewPadding + previousRight - raiseOfTwoPadding
             }
-
-            previousTextWidth = translateWidth
+            val fromLeftToRightWidth = coordinateRect.left + widthOfText
+            coordinateRect.right = if (index == size && text.length == 2) {
+                fromLeftToRightWidth + extraPadding + halfPadding
+            } else {
+                fromLeftToRightWidth + raiseOfTwoPadding
+            }
+            previousRight = coordinateRect.right
 
             //default selected rectangles
             if (pair.second.isSelected && isFirstDraw) {
@@ -232,15 +258,10 @@ class RangePickerView : View {
     private fun drawSelectedBackgrounds(canvas: Canvas?) {
         if (selectedFirstIndex == -1 || selectedSecondIndex == -1) return
 
-        val measuredFirstText = textPaint.measureText(options[selectedFirstIndex].first.getOption())
-        val measuredSecondText = textPaint.measureText(options[selectedSecondIndex].first.getOption())
-        val factorFirst = min(measuredFirstText, extraPadding)
-        val factorSecond = min(measuredSecondText, extraPadding)
-
         rectangleBackgroundPaint.apply { color = backgroundSelectedTint }
-
-        drawSelectedBackgroundRect(canvas = canvas, factor = factorFirst, rectF = firstSelectedRect)
-        drawSelectedBackgroundRect(canvas = canvas, factor = factorSecond, rectF = secondSelectedRect)
+        val quoterOfExtraPadding = extraPadding / 10
+        drawSelectedBackgroundRect(canvas = canvas, factor = quoterOfExtraPadding, rectF = firstSelectedRect)
+        drawSelectedBackgroundRect(canvas = canvas, factor = quoterOfExtraPadding, rectF = secondSelectedRect)
     }
 
     private fun drawSelectedBackgroundRect(canvas: Canvas?, factor: Float, rectF: RectF) {
@@ -379,6 +400,7 @@ class RangePickerView : View {
     }
 
     companion object {
+        const val DEFAULT_MIN_HEIGHT = 58
         const val DEFAULT_CORNER_RADIUS = 74
         const val DEFAULT_EXTRA_PADDING = 16
         const val DEFAULT_STROKE_WIDTH = 32

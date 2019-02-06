@@ -11,10 +11,9 @@
     <yaroslav.ovdiienko.idivision.rangepicker.rangepicker.RangePickerView
         android:id="@+id/picker"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_marginLeft="8dp"
-        app:cornerRadius="100dp"
-        app:extraPadding="24dp" />
+        android:layout_height="wrap_content"
+        android:layout_marginRight="4dp"
+        app:cornerRadius="100dp" />
     <!--<yaroslav.ovdiienko.idivision.rangepicker.RangePickerCompound android:layout_width="match_parent"-->
     <!--android:id="@+id/picker"-->
     <!--android:layout_height="wrap_content"/>-->

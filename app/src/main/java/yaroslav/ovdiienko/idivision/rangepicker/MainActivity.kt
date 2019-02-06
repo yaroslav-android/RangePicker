@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
             Option("2"),
             Option("3"),
             Option("4"),
-            Option("5")
+            Option("5+")
         )
     }
 }
