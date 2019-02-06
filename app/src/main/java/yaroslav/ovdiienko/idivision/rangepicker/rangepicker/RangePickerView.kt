@@ -41,20 +41,21 @@ class RangePickerView : View {
     private var bounds: Int = 0
     private var extraPadding: Float = displayUtils.convertDpToPx(16).toFloat()
     private var isSingleClickHappened = false
+    private var isFirstDraw = true
 
     constructor(context: Context?) : super(context)
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
     constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(
-        context,
-        attrs,
-        defStyleAttr
+            context,
+            attrs,
+            defStyleAttr
     )
 
     constructor(
-        context: Context?,
-        attrs: AttributeSet?,
-        defStyleAttr: Int,
-        defStyleRes: Int
+            context: Context?,
+            attrs: AttributeSet?,
+            defStyleAttr: Int,
+            defStyleRes: Int
     ) : super(context, attrs, defStyleAttr, defStyleRes)
 
     init {
@@ -65,8 +66,8 @@ class RangePickerView : View {
             it.textSize = displayUtils.convertSpToPx(14).toFloat()
             it.textAlign = Paint.Align.CENTER
             it.typeface = ResourcesCompat.getFont(
-                context,
-                R.font.display_regular
+                    context,
+                    R.font.display_regular
             )
         }
 
@@ -80,20 +81,20 @@ class RangePickerView : View {
 
     private fun initColors() {
         colorBlueSelected = ContextCompat.getColor(
-            context,
-            R.color.colorBlueSelectedPicker
+                context,
+                R.color.colorBlueSelectedPicker
         )
         colorGreyBackground = ContextCompat.getColor(
-            context,
-            R.color.colorGreyBgPiker
+                context,
+                R.color.colorGreyBgPiker
         )
         colorTextBlack = ContextCompat.getColor(
-            context,
-            R.color.colorTextBlack
+                context,
+                R.color.colorTextBlack
         )
         colorTextWhite = ContextCompat.getColor(
-            context,
-            R.color.colorTextWhite
+                context,
+                R.color.colorTextWhite
         )
     }
 
@@ -270,27 +271,24 @@ class RangePickerView : View {
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
 
-        clearViews(canvas)
-        drawRectanglesForClicks(canvas)
+        if (isFirstDraw) drawRectanglesForClicks(canvas)
         drawBackgroundBetweenSelected(canvas)
         drawSelectedBackgrounds(canvas)
         drawText(canvas)
     }
 
-    private fun clearViews(canvas: Canvas?) {
-
-
-    }
-
     private fun drawRectanglesForClicks(canvas: Canvas?) {
+        rectangleBackgroundPaint.apply { color = Color.TRANSPARENT }
         options.forEach { pair ->
             canvas?.drawRoundRect(
-                pair.second.coordinateRect,
-                0f,
-                0f,
-                rectangleBackgroundPaint.apply { color = Color.TRANSPARENT }
+                    pair.second.coordinateRect,
+                    0f,
+                    0f,
+                    rectangleBackgroundPaint
             )
         }
+
+        isFirstDraw = false
     }
 
     private fun drawBackgroundBetweenSelected(canvas: Canvas?) {
@@ -311,23 +309,23 @@ class RangePickerView : View {
         rectangleBackgroundPaint.apply { color = colorBlueSelected }
 
         canvas?.drawRoundRect(
-            first.left - factorFirst,
-            first.top,
-            first.right + factorFirst,
-            first.bottom,
-            defaultCornerRadius,
-            defaultCornerRadius,
-            rectangleBackgroundPaint
+                first.left - factorFirst,
+                first.top,
+                first.right + factorFirst,
+                first.bottom,
+                defaultCornerRadius,
+                defaultCornerRadius,
+                rectangleBackgroundPaint
         )
 
         canvas?.drawRoundRect(
-            second.left - factorSecond,
-            second.top,
-            second.right + factorSecond,
-            second.bottom,
-            defaultCornerRadius,
-            defaultCornerRadius,
-            rectangleBackgroundPaint
+                second.left - factorSecond,
+                second.top,
+                second.right + factorSecond,
+                second.bottom,
+                defaultCornerRadius,
+                defaultCornerRadius,
+                rectangleBackgroundPaint
         )
     }
 
@@ -340,10 +338,10 @@ class RangePickerView : View {
             }
 
             canvas?.drawText(
-                pair.first.getOption(),
-                pair.second.coordinateRect.centerX(),
-                pair.second.coordinateRect.centerY() + 10f,
-                textPaint
+                    pair.first.getOption(),
+                    pair.second.coordinateRect.centerX(),
+                    pair.second.coordinateRect.centerY() + 10f,
+                    textPaint
             )
         }
     }
@@ -536,10 +534,10 @@ class RangePickerView : View {
 
     private fun calculateTextBounds(option: Pair<Option, RectShape>): Int {
         textPaint.getTextBounds(
-            option.first.getOption(),
-            0,
-            option.first.getOption().length,
-            option.second.textBoundsRect
+                option.first.getOption(),
+                0,
+                option.first.getOption().length,
+                option.second.textBoundsRect
         )
 
         Log.d("DEBUG", option.second.textBoundsRect.toShortString())
