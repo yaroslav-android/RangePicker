@@ -2,6 +2,7 @@ package yaroslav.ovdiienko.idivision.rangepicker
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
 import yaroslav.ovdiienko.idivision.rangepicker.rangepicker.model.Option
 
@@ -13,6 +14,10 @@ class MainActivity : AppCompatActivity() {
 
         picker.apply {
             setOptions(getOptions())
+        }
+
+        btn_get_values.setOnClickListener {
+            Toast.makeText(this, "${picker.getSelectedOptions()}", Toast.LENGTH_SHORT).show()
         }
     }
 

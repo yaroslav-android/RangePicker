@@ -17,6 +17,7 @@ import yaroslav.ovdiienko.idivision.rangepicker.rangepicker.model.Option
 import yaroslav.ovdiienko.idivision.rangepicker.rangepicker.model.RectShape
 import yaroslav.ovdiienko.idivision.rangepicker.util.DisplayUtils
 import kotlin.math.abs
+import kotlin.math.min
 
 
 class RangePickerView : View {
@@ -33,8 +34,7 @@ class RangePickerView : View {
 
     private var selectedFirstIndex: Int = -1
     private var selectedSecondIndex: Int = -1
-    private var displayUtils: DisplayUtils =
-        DisplayUtils(context as AppCompatActivity)
+    private var displayUtils: DisplayUtils = DisplayUtils(context as AppCompatActivity)
     private val options: MutableList<Pair<Option, RectShape>> = ArrayList()
     private var defaultCornerRadius: Float = displayUtils.convertDpToPx(70).toFloat()
     private var measuredViewPadding: Float = 0f
@@ -58,38 +58,41 @@ class RangePickerView : View {
     ) : super(context, attrs, defStyleAttr, defStyleRes)
 
     init {
+        // TODO: add attrs values for color/sizes etc.
         initColors()
-        // TODO: init all needed objects.
-        // TODO: replace with 1 paint for text and rect
+
         textPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-            it.textSize = displayUtils.convertSpToPx(16).toFloat()
+            it.textSize = displayUtils.convertSpToPx(14).toFloat()
             it.textAlign = Paint.Align.CENTER
-            it.typeface = ResourcesCompat.getFont(context,
+            it.typeface = ResourcesCompat.getFont(
+                context,
                 R.font.display_regular
             )
         }
 
-        rectangleBackgroundPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-            it.color = Color.BLUE
-        }
+        rectangleBackgroundPaint = Paint(Paint.ANTI_ALIAS_FLAG)
 
         lineBackgroundPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-            it.color = Color.GREEN
+            it.color = colorGreyBackground
             it.strokeWidth = displayUtils.convertSpToPx(32).toFloat()
         }
     }
 
     private fun initColors() {
-        colorBlueSelected = ContextCompat.getColor(context,
+        colorBlueSelected = ContextCompat.getColor(
+            context,
             R.color.colorBlueSelectedPicker
         )
-        colorGreyBackground = ContextCompat.getColor(context,
+        colorGreyBackground = ContextCompat.getColor(
+            context,
             R.color.colorGreyBgPiker
         )
-        colorTextBlack = ContextCompat.getColor(context,
+        colorTextBlack = ContextCompat.getColor(
+            context,
             R.color.colorTextBlack
         )
-        colorTextWhite = ContextCompat.getColor(context,
+        colorTextWhite = ContextCompat.getColor(
+            context,
             R.color.colorTextWhite
         )
     }
@@ -219,14 +222,17 @@ class RangePickerView : View {
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+        // TODO: add measure to handle padding/margin/wrap_content etc.
         measuredViewPadding = (measuredWidth - bounds).toFloat() / options.size
-        // TODO: calculate coordinateRect for options
         calculateCoordinateRectangles()
     }
 
     private fun calculateCoordinateRectangles() {
         var previousTextWidth = 0f
+        var selectedCount = 0
+
         options.forEachIndexed { index, pair ->
+            // TODO: fix bug with different text size and strange padding between texts
             val text = options[index].first.getOption()
             val widthOfText = textPaint.measureText(text)
 
@@ -235,21 +241,45 @@ class RangePickerView : View {
             val currentMarginFromPrevious = abs(translateWidth - previousTextWidth) / 2
             val newTranslatedWidth = translateWidth + currentMarginFromPrevious
 
-            coordinateRect.left = if (index == 0) extraPadding else newTranslatedWidth
             coordinateRect.top = measuredHeight / 10f
             coordinateRect.bottom = measuredHeight / 2f
-            coordinateRect.right = widthOfText + newTranslatedWidth + extraPadding
+            if (index == 0) {
+                coordinateRect.left = extraPadding
+                coordinateRect.right = widthOfText + newTranslatedWidth
+            } else {
+                coordinateRect.left = newTranslatedWidth
+                coordinateRect.right = widthOfText + newTranslatedWidth + extraPadding
+            }
+
             previousTextWidth = translateWidth
+
+            //default selected rectangles
+            if (pair.second.isSelected) {
+                if (selectedCount == 0) {
+                    selectedFirstIndex = index
+                    firstSelectedRect.set(coordinateRect)
+                } else if (selectedCount == 1) {
+                    selectedSecondIndex = index
+                    secondSelectedRect.set(coordinateRect)
+                }
+                selectedCount++
+            }
         }
     }
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
 
+        clearViews(canvas)
         drawRectanglesForClicks(canvas)
         drawBackgroundBetweenSelected(canvas)
         drawSelectedBackgrounds(canvas)
         drawText(canvas)
+    }
+
+    private fun clearViews(canvas: Canvas?) {
+
+
     }
 
     private fun drawRectanglesForClicks(canvas: Canvas?) {
@@ -264,31 +294,37 @@ class RangePickerView : View {
     }
 
     private fun drawBackgroundBetweenSelected(canvas: Canvas?) {
-        val first = options[0].second.coordinateRect
-        val second = options[5].second.coordinateRect
+        val first = firstSelectedRect
+        val second = secondSelectedRect
         canvas?.drawLine(first.centerX(), first.centerY(), second.centerX(), second.centerY(), lineBackgroundPaint)
-        /*canvas?.drawRect(
-                whiteTextPaint.measureText(firstSelectedText) * selectedFirstIndex + 1 + extraPadding,
-                firstSelectedRect.top + extraPadding,
-                whiteTextPaint.measureText(secondSelectedText) * selectedSecondIndex + 1 + whiteTextPaint.measureText(secondSelectedText) - extraPadding,
-                firstSelectedRect.bottom - extraPadding,
-                lineBackgroundPaint
-        )*/
     }
 
     private fun drawSelectedBackgrounds(canvas: Canvas?) {
-        //TODO: replace with firstSelectedRect/secondSelectedRect and add extra padding to left/right
-        val first = options[0].second.coordinateRect
-        val second = options[5].second.coordinateRect
+        val first = firstSelectedRect
+        val second = secondSelectedRect
+
+        val measuredFirstText = textPaint.measureText(options[selectedFirstIndex].first.getOption())
+        val measuredSecondText = textPaint.measureText(options[selectedSecondIndex].first.getOption())
+        val factorFirst = min(measuredFirstText, extraPadding)
+        val factorSecond = min(measuredSecondText, extraPadding)
+
+        rectangleBackgroundPaint.apply { color = colorBlueSelected }
+
         canvas?.drawRoundRect(
-            first,
+            first.left - factorFirst,
+            first.top,
+            first.right + factorFirst,
+            first.bottom,
             defaultCornerRadius,
             defaultCornerRadius,
             rectangleBackgroundPaint
         )
 
         canvas?.drawRoundRect(
-            second,
+            second.left - factorSecond,
+            second.top,
+            second.right + factorSecond,
+            second.bottom,
             defaultCornerRadius,
             defaultCornerRadius,
             rectangleBackgroundPaint
@@ -438,9 +474,29 @@ class RangePickerView : View {
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         return when (event?.action) {
             MotionEvent.ACTION_DOWN -> {
-                options.forEach {
-                    if (it.second.coordinateRect.contains(event.x, event.y)) {
-                        Log.d("DEBUG", "Clicked at ${it.first.getOption()}")
+                options.forEachIndexed { index, pair ->
+                    val selectedRect = pair.second
+                    if (selectedRect.coordinateRect.contains(event.x, event.y)) {
+                        Log.d("DEBUG", "Clicked at ${pair.first.getOption()}")
+
+                        if (index == selectedFirstIndex && isSingleClickHappened) return false
+
+                        if (!isSingleClickHappened) {
+                            firstSelectedRect.set(selectedRect.coordinateRect)
+                            secondSelectedRect.set(selectedRect.coordinateRect)
+                            options[selectedFirstIndex].second.isSelected = false
+                            options[selectedSecondIndex].second.isSelected = false
+
+                            selectedFirstIndex = index
+                            selectedRect.isSelected = true
+                            isSingleClickHappened = true
+                        } else {
+                            secondSelectedRect.set(selectedRect.coordinateRect)
+
+                            selectedSecondIndex = index
+                            selectedRect.isSelected = true
+                            isSingleClickHappened = false
+                        }
                         return true
                     }
                 }
@@ -458,9 +514,10 @@ class RangePickerView : View {
     override fun performClick(): Boolean {
         super.performClick()
         // TODO: provide some action or/and animation.
+
+        invalidate()
         return true
     }
-
 
     fun setOptions(newOptions: List<Option>) {
         if (options.isNotEmpty()) {
