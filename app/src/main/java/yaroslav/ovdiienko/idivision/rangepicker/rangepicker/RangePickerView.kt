@@ -102,13 +102,13 @@ class RangePickerView : View {
 
         val defaultTextColorOnSurface = ContextCompat.getColor(context, R.color.colorTextBlack)
         textColorOnSurface = attrs?.getColor(
-            R.styleable.RangePickerView_backgroundSelectedTint,
+            R.styleable.RangePickerView_textColorOnSurface,
             defaultTextColorOnSurface
         ) ?: defaultTextColorOnSurface
 
         val defaultTextColorOnSelected = ContextCompat.getColor(context, R.color.colorTextWhite)
         textColorOnSelected = attrs?.getColor(
-            R.styleable.RangePickerView_backgroundSelectedTint,
+            R.styleable.RangePickerView_textColorOnSelected,
             defaultTextColorOnSelected
         ) ?: defaultTextColorOnSelected
     }
