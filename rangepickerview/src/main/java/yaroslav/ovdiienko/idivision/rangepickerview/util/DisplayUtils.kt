@@ -1,11 +1,15 @@
 package yaroslav.ovdiienko.idivision.rangepickerview.util
 
-import android.app.Activity
 import android.util.DisplayMetrics
+import android.view.WindowManager
 
 
-class DisplayUtils(private val activity: Activity) {
-    private val displayMetrics = activity.resources.displayMetrics
+class DisplayUtils(private val windowManager: WindowManager) {
+    private val displayMetrics: DisplayMetrics = DisplayMetrics()
+
+    init {
+        windowManager.defaultDisplay.getMetrics(displayMetrics)
+    }
 
     fun convertDpToPx(dp: Int): Int {
         val scale = displayMetrics.density
@@ -33,7 +37,7 @@ class DisplayUtils(private val activity: Activity) {
     }
 
     fun getMinWidthValue(): Int {
-        val display = activity.windowManager.defaultDisplay
+        val display = windowManager.defaultDisplay
         val metrics = DisplayMetrics()
         display.getMetrics(metrics)
         val heightPixels = metrics.heightPixels
@@ -42,21 +46,21 @@ class DisplayUtils(private val activity: Activity) {
     }
 
     fun getMaxWidthValue(): Int {
-        val display = activity.windowManager.defaultDisplay
+        val display = windowManager.defaultDisplay
         val metrics = DisplayMetrics()
         display.getMetrics(metrics)
         return Math.max(metrics.heightPixels, metrics.widthPixels)
     }
 
     fun getHeightActivity(): Int {
-        val display = activity.windowManager.defaultDisplay
+        val display = windowManager.defaultDisplay
         val metrics = DisplayMetrics()
         display.getMetrics(metrics)
         return metrics.heightPixels
     }
 
     fun getWidthActivity(): Int {
-        val display = activity.windowManager.defaultDisplay
+        val display = windowManager.defaultDisplay
         val metrics = DisplayMetrics()
         display.getMetrics(metrics)
         return metrics.widthPixels

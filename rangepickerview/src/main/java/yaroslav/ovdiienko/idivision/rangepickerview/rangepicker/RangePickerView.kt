@@ -17,6 +17,7 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewConfiguration
+import android.view.WindowManager
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
@@ -27,7 +28,6 @@ import yaroslav.ovdiienko.idivision.rangepickerview.rangepicker.model.RectShape
 import yaroslav.ovdiienko.idivision.rangepickerview.util.AnimatedRectProperties
 import yaroslav.ovdiienko.idivision.rangepickerview.util.DisplayUtils
 import yaroslav.ovdiienko.idivision.rangepickerview.util.addAnimationEndListener
-import yaroslav.ovdiienko.idivision.rangepickerview.util.scanForActivity
 
 
 class RangePickerView : View {
@@ -103,9 +103,8 @@ class RangePickerView : View {
     }
 
     init {
-        context.scanForActivity(context)?.let {
-            displayUtils = DisplayUtils(it)
-        }
+        displayUtils =
+            DisplayUtils(context.getSystemService(Context.WINDOW_SERVICE) as WindowManager)
     }
 
     private fun init(attrs: AttributeSet? = null) {
