@@ -43,7 +43,8 @@ class RangePickerView : View {
     private var textColorOnSelected: Int = 0
 
     private val options: MutableList<Pair<Option, RectShape>> = ArrayList()
-    private lateinit var displayUtils: DisplayUtils
+    private val displayUtils: DisplayUtils =
+        DisplayUtils(context.getSystemService(Context.WINDOW_SERVICE) as WindowManager)
 
     private val dataOfAnimation = DataRangeAnimation()
     private var cornerRadius: Float = 0f
@@ -68,10 +69,10 @@ class RangePickerView : View {
         // TODO: if selected just follow point (could intersect into with second selected item)
 
         if (firstSelectedRect.contains(downPointX, downPointY)) {
-            Log.d("DEBUG", "firstSelectedRect Long press!")
+//            Log.d("DEBUG", "firstSelectedRect Long press!")
 
         } else if (secondSelectedRect.contains(downPointX, downPointY)) {
-            Log.d("DEBUG", "secondSelectedRect Long press!")
+//            Log.d("DEBUG", "secondSelectedRect Long press!")
 
         }
     }
@@ -100,11 +101,6 @@ class RangePickerView : View {
         defStyleRes: Int
     ) : super(context, attrs, defStyleAttr, defStyleRes) {
         init(attrs)
-    }
-
-    init {
-        displayUtils =
-            DisplayUtils(context.getSystemService(Context.WINDOW_SERVICE) as WindowManager)
     }
 
     private fun init(attrs: AttributeSet? = null) {
@@ -390,7 +386,7 @@ class RangePickerView : View {
             }
             MotionEvent.ACTION_MOVE -> {
                 if (isLongClick && (Math.abs(downPointX - event.x) > DEFAULT_THRESHOLD)) {
-                    Log.d("DEBUG", "MOVING POINT ${event.x}, ${event.y}")
+//                    Log.d("DEBUG", "MOVING POINT ${event.x}, ${event.y}")
                 }
                 mainThreadHandler.removeCallbacks(longClickRunnable)
                 true
@@ -609,7 +605,7 @@ class RangePickerView : View {
         const val DEFAULT_STROKE_WIDTH = 32
         const val DEFAULT_TEXT_SIZE = 14
 
-        const val DEFAULT_ANIMATION_DURATION = 300L
+        const val DEFAULT_ANIMATION_DURATION = 200L
         const val DEFAULT_THRESHOLD = 30.0f
 
         const val SUPER_STATE = "superState"
