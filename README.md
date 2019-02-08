@@ -16,7 +16,7 @@ Maven:
 <dependency>
     <groupId>com.github.yaroslav-android</groupId>
     <artifactId>RangePicker</artifactId>
-    <version>1.0.6-beta01</version>
+    <version>version</version>
 </dependency>
 ```
 
@@ -32,7 +32,7 @@ allprojects {
 ```
 ```groovy
 dependencies {
-    implementation 'com.github.yaroslav-android:RangePicker:latest.version'
+    implementation 'com.github.yaroslav-android:RangePicker:version'
 }
 ``` 
 </br>
