@@ -5,6 +5,7 @@ import android.animation.AnimatorSet
 import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
+import androidx.fragment.app.DialogFragment
 
 
 fun AnimatorSet.addAnimationEndListener(block: () -> Unit) {
@@ -39,6 +40,7 @@ fun AnimatorSet.addAnimationEndListener(block: () -> Unit) {
 fun Context.scanForActivity(context: Context?): Activity? {
     return when (this) {
         is Activity -> context as Activity
+        is DialogFragment -> activity
         is ContextWrapper -> scanForActivity((this as ContextWrapper).baseContext)
         else -> null
     }
