@@ -1,4 +1,4 @@
-package yaroslav.ovdiienko.idivision.rangepicker.util
+package yaroslav.ovdiienko.idivision.rangepickerview.util
 
 import android.animation.Animator
 import android.animation.AnimatorSet

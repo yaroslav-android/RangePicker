@@ -1,4 +1,4 @@
-package yaroslav.ovdiienko.idivision.rangepicker.rangepicker.model
+package yaroslav.ovdiienko.idivision.rangepickerview.rangepicker.model
 
 
 class DataRangeAnimation {

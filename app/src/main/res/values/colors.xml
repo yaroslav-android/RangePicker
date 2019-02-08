@@ -3,10 +3,4 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
-    <color name="colorTextWhite">#fff</color>
-    <color name="colorTextBlack">#344143</color>
-
-    <color name="colorGreyBgPiker">#eaeeee</color>
-    <color name="colorBlueSelectedPicker">#00caf2</color>
-    <color name="colorBlueBgPickerTransparent">#2800CAF2</color>
 </resources>

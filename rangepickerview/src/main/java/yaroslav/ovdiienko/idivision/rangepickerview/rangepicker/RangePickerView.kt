@@ -1,4 +1,4 @@
-package yaroslav.ovdiienko.idivision.rangepicker.rangepicker
+package yaroslav.ovdiienko.idivision.rangepickerview.rangepicker
 
 import android.animation.Animator
 import android.animation.AnimatorSet
@@ -21,13 +21,13 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewConfiguration
 import android.view.animation.AccelerateDecelerateInterpolator
-import yaroslav.ovdiienko.idivision.rangepicker.R
-import yaroslav.ovdiienko.idivision.rangepicker.rangepicker.model.DataRangeAnimation
-import yaroslav.ovdiienko.idivision.rangepicker.rangepicker.model.Option
-import yaroslav.ovdiienko.idivision.rangepicker.rangepicker.model.RectShape
-import yaroslav.ovdiienko.idivision.rangepicker.util.AnimatedRectProperties
-import yaroslav.ovdiienko.idivision.rangepicker.util.DisplayUtils
-import yaroslav.ovdiienko.idivision.rangepicker.util.addAnimationEndListener
+import yaroslav.ovdiienko.idivision.rangepickerview.R
+import yaroslav.ovdiienko.idivision.rangepickerview.rangepicker.model.DataRangeAnimation
+import yaroslav.ovdiienko.idivision.rangepickerview.rangepicker.model.Option
+import yaroslav.ovdiienko.idivision.rangepickerview.rangepicker.model.RectShape
+import yaroslav.ovdiienko.idivision.rangepickerview.util.AnimatedRectProperties
+import yaroslav.ovdiienko.idivision.rangepickerview.util.DisplayUtils
+import yaroslav.ovdiienko.idivision.rangepickerview.util.addAnimationEndListener
 
 
 class RangePickerView : View {
