@@ -18,7 +18,6 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewConfiguration
 import android.view.animation.AccelerateDecelerateInterpolator
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import yaroslav.ovdiienko.idivision.rangepickerview.R
@@ -28,6 +27,7 @@ import yaroslav.ovdiienko.idivision.rangepickerview.rangepicker.model.RectShape
 import yaroslav.ovdiienko.idivision.rangepickerview.util.AnimatedRectProperties
 import yaroslav.ovdiienko.idivision.rangepickerview.util.DisplayUtils
 import yaroslav.ovdiienko.idivision.rangepickerview.util.addAnimationEndListener
+import yaroslav.ovdiienko.idivision.rangepickerview.util.scanForActivity
 
 
 class RangePickerView : View {
@@ -43,7 +43,7 @@ class RangePickerView : View {
     private var textColorOnSelected: Int = 0
 
     private val options: MutableList<Pair<Option, RectShape>> = ArrayList()
-    private val displayUtils: DisplayUtils = DisplayUtils(context as AppCompatActivity)
+    private lateinit var displayUtils: DisplayUtils
 
     private val dataOfAnimation = DataRangeAnimation()
     private var cornerRadius: Float = 0f
@@ -100,6 +100,12 @@ class RangePickerView : View {
         defStyleRes: Int
     ) : super(context, attrs, defStyleAttr, defStyleRes) {
         init(attrs)
+    }
+
+    init {
+        context.scanForActivity(context)?.let {
+            displayUtils = DisplayUtils(it)
+        }
     }
 
     private fun init(attrs: AttributeSet? = null) {
