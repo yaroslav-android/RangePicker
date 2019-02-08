@@ -1,1 +1,1 @@
-include ':app', ':rangepickerview'
+include ':rangepickerview'
