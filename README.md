@@ -1,5 +1,5 @@
 # RangePicker
-Custom Range Picker view with modern design.  ![version](https://img.shields.io/badge/version-1.0.6--beta01-green.svg)</br>
+Custom Range Picker view with modern design.</br>![version](https://img.shields.io/badge/version-1.0.6--beta01-green.svg)</br>
 
 <p align="center"><kbd>
  <img src="https://github.com/yaroslav-android/RangePicker/blob/master/assets/ezgif.com-video-to-gif.gif" alt="preview"/></kbd>
@@ -27,7 +27,7 @@ In **Table 1** you could see list of available attributes.
 - [ ] Fix calculations for drawings
 
 
-**Dependencies:**</br></br>
+**Dependencies:**</br>
 Maven:
 ```xml
 <repositories>
