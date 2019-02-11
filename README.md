@@ -1,5 +1,9 @@
 # RangePicker
-Custom Range Picker view with modern design.
+Custom Range Picker view with modern design.</br>![version](https://img.shields.io/badge/version-1.0.6--beta01-green.svg)</br>
+
+<p align="center"><kbd>
+ <img src="https://github.com/yaroslav-android/RangePicker/blob/master/assets/ezgif.com-video-to-gif.gif" alt="preview"/></kbd>
+</p>
 
 **Attributes:**</br>
 In **Table 1** you could see list of available attributes.
@@ -21,3 +25,39 @@ In **Table 1** you could see list of available attributes.
 **Planned:**
 - [ ] Long click support (dragging selected items)
 - [ ] Fix calculations for drawings
+
+
+**Dependencies:**</br>
+Maven:
+```xml
+<repositories>
+    <repository>
+        <id>jitpack.io</id>
+        <url>https://jitpack.io</url>
+    </repository>
+</repositories>
+```
+
+```xml
+<dependency>
+    <groupId>com.github.yaroslav-android</groupId>
+    <artifactId>RangePicker</artifactId>
+    <version>version</version>
+</dependency>
+```
+
+or Gradle:
+```groovy
+allprojects {
+    repositories {
+        ...
+        maven { url 'https://jitpack.io' }
+    }
+}
+
+```
+```groovy
+dependencies {
+    implementation 'com.github.yaroslav-android:RangePicker:version'
+}
+``` 
