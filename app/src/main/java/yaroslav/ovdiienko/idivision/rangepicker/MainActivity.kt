@@ -23,8 +23,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun getOptions(): List<Option> {
         return listOf(
-            Option("Studio"),
-            Option("1"),
+            Option("Single"),
             Option("2"),
             Option("3"),
             Option("4"),

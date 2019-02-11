@@ -12,7 +12,9 @@
         android:id="@+id/picker"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginRight="4dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="16dp"
+        app:backgroundSelectedTint="@color/colorPrimary"
         app:cornerRadius="100dp" />
 
     <Button

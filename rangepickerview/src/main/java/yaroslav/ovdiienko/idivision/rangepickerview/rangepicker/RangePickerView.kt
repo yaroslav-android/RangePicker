@@ -61,19 +61,15 @@ class RangePickerView : View {
     private var downPointY: Float = -1f
     private val longClickRunnable = Runnable {
         isLongClick = true
-        if (vibrato.hasVibrator()) {
-            vibrato.vibrate(VIBRATION_PATTERN, -1)
-        }
+        vibrateSlightly()
 
         // TODO: it could be clicked on none-selected item and drag from it into different position
         // TODO: if selected just follow point (could intersect into with second selected item)
 
         if (firstSelectedRect.contains(downPointX, downPointY)) {
 //            Log.d("DEBUG", "firstSelectedRect Long press!")
-
         } else if (secondSelectedRect.contains(downPointX, downPointY)) {
 //            Log.d("DEBUG", "secondSelectedRect Long press!")
-
         }
     }
 
@@ -373,9 +369,7 @@ class RangePickerView : View {
                     ViewConfiguration.getLongPressTimeout().toLong()
                 )
 
-                if (vibrato.hasVibrator()) {
-                    vibrato.vibrate(VIBRATION_PATTERN, -1)
-                }
+                vibrateSlightly()
                 return processActionDown(event)
             }
             MotionEvent.ACTION_UP -> {
@@ -395,12 +389,18 @@ class RangePickerView : View {
         }
     }
 
+    private fun vibrateSlightly() {
+        if (vibrato.hasVibrator()) {
+            vibrato.vibrate(VIBRATION_PATTERN, -1)
+        }
+    }
+
     private fun processActionDown(event: MotionEvent): Boolean {
         options.forEachIndexed { index, pair ->
             val selectedRect = pair.second
             if (selectedRect.coordinateRect.contains(event.x, event.y)) {
                 if (index == dataOfAnimation.firstPreviousIndex && isSingleClickHappened) {
-                    return super.onTouchEvent(event)
+                    return true
                 }
 
                 if (!isSingleClickHappened) {
