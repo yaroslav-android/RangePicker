@@ -385,7 +385,10 @@ class RangePickerView : View {
                 mainThreadHandler.removeCallbacks(longClickRunnable)
                 true
             }
-            else -> super.onTouchEvent(event)
+            else -> {
+                mainThreadHandler.removeCallbacks(longClickRunnable)
+                super.onTouchEvent(event)
+            }
         }
     }
 
