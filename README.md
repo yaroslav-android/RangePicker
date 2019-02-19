@@ -31,6 +31,7 @@ In **Table 1** you could see list of available attributes.
     - [x] Dismiss drag
 - [ ] Fix calculations for drawings
 - [ ] Add possibility to change view properties programatically
+- [ ] Allow set default selected items by position
 
 
 **Dependencies:**</br>
