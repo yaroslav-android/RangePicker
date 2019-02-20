@@ -7,16 +7,12 @@ import android.animation.ValueAnimator
 import android.annotation.TargetApi
 import android.content.Context
 import android.content.res.TypedArray
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.RectF
+import android.graphics.*
 import android.os.*
 import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
-import android.view.ViewConfiguration
 import android.view.WindowManager
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.core.content.ContextCompat
@@ -25,6 +21,7 @@ import yaroslav.ovdiienko.idivision.rangepickerview.R
 import yaroslav.ovdiienko.idivision.rangepickerview.rangepicker.model.DataRangeAnimation
 import yaroslav.ovdiienko.idivision.rangepickerview.rangepicker.model.Option
 import yaroslav.ovdiienko.idivision.rangepickerview.rangepicker.model.RectShape
+import yaroslav.ovdiienko.idivision.rangepickerview.rangepicker.model.TapMode
 import yaroslav.ovdiienko.idivision.rangepickerview.util.AnimatedRectProperties
 import yaroslav.ovdiienko.idivision.rangepickerview.util.DisplayUtils
 import yaroslav.ovdiienko.idivision.rangepickerview.util.addAnimationEndListener
@@ -36,6 +33,7 @@ class RangePickerView : View {
     private val textPaint: Paint = Paint()
     private val firstSelectedRect = AnimatableRectF()
     private val secondSelectedRect = AnimatableRectF()
+    private val viewBounds = Rect()
 
     private var backgroundSelectedTint: Int = 0
     private var backgroundStripTint: Int = 0
@@ -51,27 +49,14 @@ class RangePickerView : View {
     private var measuredViewPadding: Float = 0f
     private var bounds: Int = 0
     private var extraPadding: Float = 0f
-    private var isSingleClickHappened = false
     private var isFirstDraw = true
-    private var isLongClick = false
 
     private lateinit var vibrato: Vibrator
-    private val mainThreadHandler = Handler()
     private var downPointX: Float = -1f
     private var downPointY: Float = -1f
-    private val longClickRunnable = Runnable {
-        isLongClick = true
-        vibrateSlightly()
+    private var tapMode = TapMode.NONE
 
-        // TODO: it could be clicked on none-selected item and drag from it into different position
-        // TODO: if selected just follow point (could intersect into with second selected item)
-
-        if (firstSelectedRect.contains(downPointX, downPointY)) {
-//            Log.d("DEBUG", "firstSelectedRect Long press!")
-        } else if (secondSelectedRect.contains(downPointX, downPointY)) {
-//            Log.d("DEBUG", "secondSelectedRect Long press!")
-        }
-    }
+    private var rangeSelectedListener: OnRangeSelectedListener? = null
 
     constructor(context: Context?) : super(context) {
         init()
@@ -364,29 +349,31 @@ class RangePickerView : View {
                 downPointX = event.x
                 downPointY = event.y
 
-                mainThreadHandler.postDelayed(
-                    longClickRunnable,
-                    ViewConfiguration.getLongPressTimeout().toLong()
-                )
+                viewBounds.apply {
+                    this.top = this@RangePickerView.top
+                    this.bottom = this@RangePickerView.bottom
+                    this.left = this@RangePickerView.left
+                    this.right = this@RangePickerView.right
+                }
 
                 vibrateSlightly()
                 return processActionDown(event)
             }
             MotionEvent.ACTION_UP -> {
-                mainThreadHandler.removeCallbacks(longClickRunnable)
-                isLongClick = false
                 performClick()
                 true
             }
             MotionEvent.ACTION_MOVE -> {
-                if (isLongClick && (Math.abs(downPointX - event.x) > DEFAULT_THRESHOLD)) {
-//                    Log.d("DEBUG", "MOVING POINT ${event.x}, ${event.y}")
+                if (!viewBounds.contains(event.x.toInt(), event.y.toInt())) {
+                    // TODO: Check weather user in view bounds
                 }
-                mainThreadHandler.removeCallbacks(longClickRunnable)
+
+                if ((Math.abs(downPointX - event.x) > DEFAULT_THRESHOLD)) {
+                    // TODO: Provide long click action
+                }
                 true
             }
             else -> {
-                mainThreadHandler.removeCallbacks(longClickRunnable)
                 super.onTouchEvent(event)
             }
         }
@@ -402,19 +389,20 @@ class RangePickerView : View {
         options.forEachIndexed { index, pair ->
             val selectedRect = pair.second
             if (selectedRect.coordinateRect.contains(event.x, event.y)) {
-                if (index == dataOfAnimation.firstPreviousIndex && isSingleClickHappened) {
+                if (index == dataOfAnimation.firstPreviousIndex && tapMode == TapMode.SINGLE) {
                     return true
                 }
 
-                if (!isSingleClickHappened) {
+                if (tapMode == TapMode.NONE) {
+                    tapMode = TapMode.SINGLE
                     handleFirstClick(index, pair)
                 } else {
+                    tapMode = TapMode.MULTIPLE
                     handleSecondClick(index, pair)
                 }
-                return true
             }
         }
-        return super.onTouchEvent(event)
+        return true
     }
 
     private fun handleFirstClick(index: Int, pair: Pair<Option, RectShape>) {
@@ -426,18 +414,25 @@ class RangePickerView : View {
         dataOfAnimation.firstNewIndex = index
         dataOfAnimation.secondNewIndex = index
         pair.second.isSelected = true
-        isSingleClickHappened = true
     }
 
     private fun handleSecondClick(index: Int, pair: Pair<Option, RectShape>) {
         dataOfAnimation.secondNewIndex = index
         pair.second.isSelected = true
-        isSingleClickHappened = false
     }
 
     override fun performClick(): Boolean {
         super.performClick()
+        rangeSelectedListener?.let { listener ->
+            val leftPoint =
+                dataOfAnimation.firstNewIndex to options[dataOfAnimation.firstNewIndex].first.getOption()
+            val rightPoint =
+                dataOfAnimation.secondNewIndex to options[dataOfAnimation.secondNewIndex].first.getOption()
+
+            listener.onRangeSelected(this, leftPoint, rightPoint)
+        }
         animateView()
+        if (tapMode == TapMode.MULTIPLE) tapMode = TapMode.NONE
         return true
     }
 
@@ -598,7 +593,38 @@ class RangePickerView : View {
                 listOfSelectedOptions.add(pair.first)
             }
         }
+        View(context).setOnClickListener { }
         return listOfSelectedOptions
+    }
+
+    fun setOnRangeSelectedListener(listener: OnRangeSelectedListener) {
+        rangeSelectedListener = listener
+    }
+
+    fun setOnRangeSelectedListener(
+        listener: (
+            RangePickerView,
+            Pair<Int, String>,
+            Pair<Int, String>
+        ) -> Unit
+    ) {
+        rangeSelectedListener = object : OnRangeSelectedListener {
+            override fun onRangeSelected(
+                view: RangePickerView,
+                leftPoint: Pair<Int, String>,
+                rightPoint: Pair<Int, String>
+            ) {
+                listener.invoke(view, leftPoint, rightPoint)
+            }
+        }
+    }
+
+    interface OnRangeSelectedListener {
+        fun onRangeSelected(
+            view: RangePickerView,
+            leftPoint: Pair<Int, String>,
+            rightPoint: Pair<Int, String>
+        )
     }
 
     companion object {
