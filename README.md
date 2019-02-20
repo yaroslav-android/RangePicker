@@ -24,14 +24,16 @@ In **Table 1** you could see list of available attributes.
 <p align="center"> <b>Table 1</b> - <i>list of available attributes</i></p>
 
 **Planned:**
-- [x] Long click support 
-    - [ ] Dragging selected items
-    - [ ] Dragging from not selected item
-    - [x] Dismiss drag
+- [ ] Long click support 
+    - [ ] dragging selected items
+    - [ ] dragging from not selected item
+    - [ ] dismiss drag
 - [ ] Fix calculations for drawings
 - [ ] Add possibility to change view properties programatically
 - [ ] Allow set default selected items by position
 - [ ] Add change listener
+    - [x] single click listener
+    - [ ] long click listener
 
 
 **Dependencies:**</br>
