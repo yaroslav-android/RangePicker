@@ -8,7 +8,10 @@ import android.annotation.TargetApi
 import android.content.Context
 import android.content.res.TypedArray
 import android.graphics.*
-import android.os.*
+import android.os.Build
+import android.os.Bundle
+import android.os.Parcelable
+import android.os.Vibrator
 import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
@@ -393,12 +396,19 @@ class RangePickerView : View {
                     return true
                 }
 
-                if (tapMode == TapMode.NONE) {
-                    tapMode = TapMode.SINGLE
-                    handleFirstClick(index, pair)
-                } else {
-                    tapMode = TapMode.MULTIPLE
-                    handleSecondClick(index, pair)
+                tapMode = when (tapMode) {
+                    TapMode.SINGLE -> {
+                        handleSecondClick(index, pair)
+                        TapMode.MULTIPLE
+                    }
+                    TapMode.MULTIPLE -> {
+                        // Should not trigger. Reset in performClick()
+                        TapMode.NONE
+                    }
+                    TapMode.NONE -> {
+                        handleFirstClick(index, pair)
+                        TapMode.SINGLE
+                    }
                 }
             }
         }
