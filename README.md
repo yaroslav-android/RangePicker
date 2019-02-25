@@ -30,7 +30,7 @@ In **Table 1** you could see list of available attributes.
     - [ ] dismiss drag
 - [ ] Fix calculations for drawings
 - [ ] Add possibility to change view properties programatically
-- [ ] Allow set default selected items by position
+- [x] Allow set default selected items by position
 - [ ] Add change listener
     - [x] single click listener
     - [ ] long click listener
