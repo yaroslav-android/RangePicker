@@ -14,13 +14,15 @@ class MainActivity : AppCompatActivity() {
 
         picker.apply {
             setOptions(getOptions())
+            setDefaultSelectedValues(1 to 4)
             setOnRangeSelectedListener { _, leftPoint, rightPoint ->
-//                Toast.makeText(context, "${picker.getSelectedOptions()}", Toast.LENGTH_SHORT).show()
+                //                Toast.makeText(context, "${picker.getSelectedOptions()}", Toast.LENGTH_SHORT).show()
 //                Toast.makeText(context, "${leftPoint.first} + ${rightPoint.first}", Toast.LENGTH_SHORT).show()
             }
         }
 
         btn_get_values.setOnClickListener {
+            picker.resetSelectedValues()
             Toast.makeText(this, "${picker.getSelectedOptions()}", Toast.LENGTH_SHORT).show()
         }
     }

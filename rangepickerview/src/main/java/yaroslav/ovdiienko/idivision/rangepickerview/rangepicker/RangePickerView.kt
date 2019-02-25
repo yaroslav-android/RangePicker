@@ -240,7 +240,7 @@ class RangePickerView : View {
 
             //default selected rectangles
             if (pair.second.isSelected && isFirstDraw) {
-                if (dataOfAnimation.firstPreviousIndex == -1 || dataOfAnimation.secondPreviousIndex == -1) {
+                if (dataOfAnimation.firstDefaultIndex == -1 || dataOfAnimation.secondDefaultIndex == -1) {
                     if (selectedCount == 0) {
                         dataOfAnimation.firstPreviousIndex = index
                         firstSelectedRect.set(coordinateRect)
@@ -591,7 +591,10 @@ class RangePickerView : View {
     private fun optionToPair(size: Int, index: Int, option: Option): Pair<Option, RectShape> {
         return option to RectShape().apply {
             // Default selected first and the last
-            isSelected = (index == 0 || index == size)
+            if (dataOfAnimation.firstPreviousIndex == -1 || dataOfAnimation.secondPreviousIndex == -1) {
+                isSelected = (index == dataOfAnimation.firstPreviousIndex
+                        || index == dataOfAnimation.secondPreviousIndex)
+            }
             cornerRadius = this@RangePickerView.cornerRadius
         }
     }
@@ -626,6 +629,52 @@ class RangePickerView : View {
             ) {
                 listener.invoke(view, leftPoint, rightPoint)
             }
+        }
+    }
+
+    fun resetSelectedValues() {
+        tapMode = dataOfAnimation.defaultTapMode
+        updateSelectedIndexes()
+        options.forEachIndexed { index, item ->
+            item.second.isSelected = (index == dataOfAnimation.firstDefaultIndex
+                    || index == dataOfAnimation.secondDefaultIndex)
+        }
+
+        animateView()
+    }
+
+    fun setDefaultSelectedValues(position: Pair<Int, Int>) {
+        val size = options.size - 1
+        if (position.first >= 0 && position.second <= size) {
+            dataOfAnimation.firstDefaultIndex = position.first
+            dataOfAnimation.secondDefaultIndex = position.second
+            updateSelectedIndexes(position)
+            options[position.first].second.isSelected = true
+            options[position.second].second.isSelected = true
+        } else {
+            val isFirstNotSuites = position.first < 0
+            val isSecondNotSuites = position.second > size
+
+            if (isFirstNotSuites && isSecondNotSuites) {
+                throw IndexOutOfBoundsException("Positions of selected elements must be from 0 to $size!")
+            } else if (isFirstNotSuites) {
+                throw IndexOutOfBoundsException("Position of first element must be equal or greater than 0!")
+            } else if (isSecondNotSuites) {
+                throw IndexOutOfBoundsException("Position of second element must be equal or lover than $size!")
+            }
+        }
+    }
+
+    private fun updateSelectedIndexes(position: Pair<Int, Int>? = null) {
+        val firstIndex = position?.first ?: dataOfAnimation.firstDefaultIndex
+        val secondIndex = position?.second ?: dataOfAnimation.secondDefaultIndex
+
+        if (position == null) {
+            dataOfAnimation.firstNewIndex = firstIndex
+            dataOfAnimation.secondNewIndex = secondIndex
+        } else {
+            dataOfAnimation.firstPreviousIndex = firstIndex
+            dataOfAnimation.secondPreviousIndex = secondIndex
         }
     }
 
