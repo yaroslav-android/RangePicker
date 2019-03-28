@@ -1,7 +1,7 @@
 package yaroslav.ovdiienko.idivision.rangepickerview.rangepicker.model
 
 
-class DataRangeAnimation {
+class IndexContainer {
     var firstPreviousIndex: Int = -1
     var secondPreviousIndex: Int = -1
 
@@ -10,5 +10,5 @@ class DataRangeAnimation {
 
     var firstDefaultIndex: Int = -1
     var secondDefaultIndex: Int = -1
-    var defaultTapMode: TapMode = TapMode.NONE
+    var defaultOptionsState: OptionsState = OptionsState.NONE
 }

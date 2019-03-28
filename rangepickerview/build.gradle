@@ -10,11 +10,11 @@ android {
     defaultConfig {
         minSdkVersion 21
         targetSdkVersion 28
+
         versionCode 1
-        versionName "1.0"
+        versionName "0.1.0"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
     }
 
     buildTypes {
@@ -32,7 +32,11 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    // Android libs
     implementation 'androidx.appcompat:appcompat:1.0.2'
 }
 repositories {

@@ -14,8 +14,9 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="16dp"
+        android:layout_marginRight="8dp"
         app:backgroundSelectedTint="@color/colorPrimary"
-        app:cornerRadius="100dp" />
+        app:cornerRadius="5dp" />
 
     <Button
         android:id="@+id/btn_get_values"
