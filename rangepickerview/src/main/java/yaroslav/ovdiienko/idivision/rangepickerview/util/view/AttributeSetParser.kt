@@ -1,4 +1,4 @@
-package yaroslav.ovdiienko.idivision.rangepickerview.util
+package yaroslav.ovdiienko.idivision.rangepickerview.util.view
 
 import android.content.Context
 import android.content.res.TypedArray

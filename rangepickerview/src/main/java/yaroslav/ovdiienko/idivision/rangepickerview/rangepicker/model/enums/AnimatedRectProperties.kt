@@ -1,4 +1,4 @@
-package yaroslav.ovdiienko.idivision.rangepickerview.util
+package yaroslav.ovdiienko.idivision.rangepickerview.rangepicker.model.enums
 
 
 enum class AnimatedRectProperties(val property: String) {

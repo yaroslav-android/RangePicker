@@ -1,4 +1,4 @@
-package yaroslav.ovdiienko.idivision.rangepickerview.rangepicker
+package yaroslav.ovdiienko.idivision.rangepickerview.rangepicker.model
 
 import android.graphics.Rect
 import android.graphics.RectF

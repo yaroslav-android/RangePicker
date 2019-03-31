@@ -18,23 +18,26 @@ import android.view.View
 import android.view.ViewConfiguration
 import android.view.WindowManager
 import android.view.animation.AccelerateDecelerateInterpolator
-import yaroslav.ovdiienko.idivision.rangepickerview.rangepicker.model.IndexContainer
-import yaroslav.ovdiienko.idivision.rangepickerview.rangepicker.model.Option
-import yaroslav.ovdiienko.idivision.rangepickerview.rangepicker.model.OptionsState
-import yaroslav.ovdiienko.idivision.rangepickerview.rangepicker.model.RectShape
-import yaroslav.ovdiienko.idivision.rangepickerview.util.AnimatedRectProperties
-import yaroslav.ovdiienko.idivision.rangepickerview.util.AttributeSetParser
-import yaroslav.ovdiienko.idivision.rangepickerview.util.DisplayUtils
-import yaroslav.ovdiienko.idivision.rangepickerview.util.addAnimationEndListener
+import yaroslav.ovdiienko.idivision.rangepickerview.rangepicker.model.*
+import yaroslav.ovdiienko.idivision.rangepickerview.rangepicker.model.enums.Direction
+import yaroslav.ovdiienko.idivision.rangepickerview.rangepicker.model.enums.OptionsState
+import yaroslav.ovdiienko.idivision.rangepickerview.util.*
+import yaroslav.ovdiienko.idivision.rangepickerview.util.extension.addAnimationEndListener
+import yaroslav.ovdiienko.idivision.rangepickerview.rangepicker.model.enums.AnimatedRectProperties
+import yaroslav.ovdiienko.idivision.rangepickerview.util.view.AttributeSetParser
+import yaroslav.ovdiienko.idivision.rangepickerview.util.view.IndexContainer
 import kotlin.math.abs
+import kotlin.math.max
 
 
 class RangePickerView : View {
     private val rectangleBackgroundPaint: Paint = Paint()
     private val lineBackgroundPaint: Paint = Paint()
     private val textPaint: Paint = Paint()
-    private val firstSelectedRect = AnimatableRectF()
-    private val secondSelectedRect = AnimatableRectF()
+    private val firstSelectedRect =
+        AnimatableRectF()
+    private val secondSelectedRect =
+        AnimatableRectF()
     private val viewBounds = Rect()
 
     private var backgroundSelectedTint: Int = 0
@@ -48,11 +51,13 @@ class RangePickerView : View {
         DisplayUtils(context.getSystemService(Context.WINDOW_SERVICE) as WindowManager)
     private var touchSlop: Int = 0
 
-    private val indexContainer = IndexContainer()
+    private val indexContainer =
+        IndexContainer()
     private var cornerRadius: Float = 0f
     private var measuredViewPadding: Float = 0f
     private var bounds: Int = 0
     private var extraPadding: Float = 0f
+    private var additionalPadding: Float = 0f
     private var isFirstDraw = true
 
     private lateinit var vibrato: Vibrator
@@ -63,7 +68,13 @@ class RangePickerView : View {
     private var optionsState = OptionsState.NONE
 
     private var isActionMove: Boolean = false
+    private var isCheckedInRect: Boolean = false
     private var rectangleToMove: Int = NONE_RECT
+    private var oldDirection = Direction.UNDEFINED
+    private var nextOptionPosition = UNDEFINED_POSITION
+    private var previousOptionPosition = UNDEFINED_POSITION
+    private var nextOption: RectShape = RectShape()
+    private var previousOption: RectShape = RectShape()
 
     private var rangeSelectedListener: OnRangeSelectedListener? = null
 
@@ -99,7 +110,11 @@ class RangePickerView : View {
         val configuration = ViewConfiguration.get(context)
         touchSlop = configuration.scaledTouchSlop
 
-        val attributeSetParser = AttributeSetParser(context, attrs)
+        val attributeSetParser =
+            AttributeSetParser(
+                context,
+                attrs
+            )
         initColors(attributeSetParser)
         initPaints(attributeSetParser)
         initDefaults(attributeSetParser)
@@ -141,6 +156,7 @@ class RangePickerView : View {
     private fun initDefaults(attrs: AttributeSetParser) {
         cornerRadius = attrs.getCornerRadius()
         extraPadding = attrs.getExtraPadding()
+        additionalPadding = extraPadding / 10
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -189,19 +205,18 @@ class RangePickerView : View {
             val text = options[index].first.getOption()
             val widthOfText = textPaint.measureText(text)
 
-            val coordinateRect = pair.second.coordinateRect
-
-            coordinateRect.top = halfOfPadding
-            coordinateRect.bottom = measuredHeight.toFloat() - halfOfPadding
-
-            coordinateRect.left = if (index == 0) {
-                halfOfPadding
-            } else {
-                measuredViewPadding + previousRight - raiseOfTwoPadding
+            val coordinateRect = pair.second.coordinateRect.apply {
+                top = halfOfPadding
+                bottom = measuredHeight.toFloat() - halfOfPadding
+                left = if (index == 0) {
+                    halfOfPadding
+                } else {
+                    measuredViewPadding + previousRight - raiseOfTwoPadding
+                }
+                val fromLeftToRightWidth = this.left + widthOfText
+                right = fromLeftToRightWidth + raiseOfTwoPadding
+                previousRight = this.right
             }
-            val fromLeftToRightWidth = coordinateRect.left + widthOfText
-            coordinateRect.right = fromLeftToRightWidth + raiseOfTwoPadding
-            previousRight = coordinateRect.right
 
             //default selected rectangles
             if (pair.second.isSelected && isFirstDraw) {
@@ -233,33 +248,15 @@ class RangePickerView : View {
 
         if (isFirstDraw) {
             viewBounds.apply {
-                this.top = this@RangePickerView.top
-                this.bottom = this@RangePickerView.bottom
-                this.left = this@RangePickerView.left
-                this.right = this@RangePickerView.right
+                top = this@RangePickerView.top
+                bottom = this@RangePickerView.bottom
+                left = this@RangePickerView.left
+                right = this@RangePickerView.right
             }
             drawRectanglesForClicks(canvas)
         }
-
         drawBackgroundBetweenSelected(canvas)
-
-        if (isActionMove) {
-            when (rectangleToMove) {
-                LEFT_RECT -> {
-                    drawLeftSelectedBackground(canvas)
-                }
-                RIGHT_RECT -> {
-                    drawRightSelectedBackground(canvas)
-                }
-                NONE_RECT -> {
-                    // Ignore. No requirement.
-                }
-            }
-        } else {
-        }
         drawSelectedBackgrounds(canvas)
-
-
         drawText(canvas)
     }
 
@@ -351,143 +348,190 @@ class RangePickerView : View {
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
-        return when (event?.action) {
+        when (event?.action) {
             MotionEvent.ACTION_DOWN -> {
-                downPointX = event.x
-                downPointY = event.y
+                downPointX = event.rawX
+                downPointY = event.rawY
 
                 if (isVibrationAllowed) {
                     vibrateSlightly()
                 }
 
                 rectangleToMove = when {
-                    firstSelectedRect.contains(event.x, event.y) -> LEFT_RECT
-                    secondSelectedRect.contains(event.x, event.y) -> RIGHT_RECT
+                    firstSelectedRect.contains(event.x, event.y) -> {
+                        LEFT_RECT
+                    }
+                    secondSelectedRect.contains(event.x, event.y) -> {
+                        RIGHT_RECT
+                    }
                     else -> NONE_RECT
                 }
-
-                return true
             }
-            MotionEvent.ACTION_UP -> {
+            MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
                 if (!isActionMove) {
                     processActionDown(event)
+                } else {
+                    updateSelectedRectangle()
+                    invalidate()
+
+                    nextOptionPosition = UNDEFINED_POSITION
+                    previousOptionPosition = UNDEFINED_POSITION
                 }
+
                 performClick()
                 isActionMove = false
-                true
             }
             MotionEvent.ACTION_MOVE -> {
-                Log.d("ACTION_MOVE", "Move: ${event.x} - ${event.y}")
-//                if (!viewBounds.contains(event.x.toInt(), event.y.toInt())) {
-//                    // TODO: Check weather user in view bounds
-//                    Log.d("ACTION_MOVE", "!contains: ${event.x} - ${event.y}")
-//                    return super.onTouchEvent(event)
-//                }
+                isActionMove = true
+                val delta = downPointX - event.rawX
+                val direction =
+                    if (delta > 0) Direction.TO_LEFT else Direction.TO_RIGHT
 
-                val distance = downPointX - event.x
-                if ((abs(distance) > DEFAULT_THRESHOLD)) {
-                    // TODO: Provide long click action
-                    Log.d("ACTION_MOVE", "Distance > DEFAULT_THRESHOLD ${event.x} - ${event.y}")
-
-//                    isActionMove = true
+                if (oldDirection == Direction.UNDEFINED) {
+                    oldDirection = direction
                 }
 
+                // Update indexes if user reach out target rect and move to next.
+                if (isCheckedInRect) {
+                    isCheckedInRect = false
+                    setupPositionsForMove(nextOptionPosition, direction)
+                }
 
-                val leftRectProperty: Float
-                val rightRectProperty: Float
-                val animationDirection =
-                    if (distance > 0) AnimatedRectProperties.RIGHT else AnimatedRectProperties.LEFT
-                if (isActionMove) {
+                when (rectangleToMove) {
+                    LEFT_RECT -> {
+                        if (nextOptionPosition == UNDEFINED_POSITION || previousOptionPosition == UNDEFINED_POSITION) {
+                            setupPositionsForMove(indexContainer.firstNewIndex, direction)
+                        }
+                        nextOption = options[nextOptionPosition].second
+                        previousOption = options[previousOptionPosition].second
+                        moveSelectedRectangle(firstSelectedRect, delta)
+                    }
+                    RIGHT_RECT -> {
+                        if (nextOptionPosition == UNDEFINED_POSITION || previousOptionPosition == UNDEFINED_POSITION) {
+                            setupPositionsForMove(indexContainer.secondNewIndex, direction)
+                        }
+                        nextOption = options[nextOptionPosition].second
+                        previousOption = options[previousOptionPosition].second
+                        moveSelectedRectangle(secondSelectedRect, delta)
+                    }
+                }
+
+                val distanceToNextPoint = calculateDistanceBetweenPoints(
+                    nextOption.coordinateRect.centerX(),
+                    nextOption.coordinateRect.width()
+                )
+                val distanceToPreviousPoint = calculateDistanceBetweenPoints(
+                    previousOption.coordinateRect.centerX(),
+                    previousOption.coordinateRect.width()
+                )
+
+                // Update indexes if user reach out target rect and move to next.
+                if (distanceToNextPoint == 0f) {
+                    isCheckedInRect = true
                     when (rectangleToMove) {
                         LEFT_RECT -> {
-                            Log.d(
-                                "ACTION_MOVE",
-                                "LEFT_RECT: ${firstSelectedRect.toShortString()}"
-                            )
-                            leftRectProperty = firstSelectedRect.left
-                            rightRectProperty = firstSelectedRect.right
-
-                            firstSelectedRect.apply {
-                                left = calculateMovingViewOffset(
-                                    animationDirection,
-                                    event.x,
-                                    leftRectProperty,
-                                    rightRectProperty,
-                                    leftRectProperty
-                                )
-                                right = calculateMovingViewOffset(
-                                    animationDirection,
-                                    event.x,
-                                    leftRectProperty,
-                                    rightRectProperty,
-                                    rightRectProperty
-                                )
-                            }
-
-                            Log.d(
-                                "ACTION_MOVE",
-                                "LEFT_RECT: ${firstSelectedRect.toShortString()}"
-                            )
+                            indexContainer.firstNewIndex = nextOptionPosition
                         }
                         RIGHT_RECT -> {
-                            Log.d(
-                                "ACTION_MOVE",
-                                "RIGHT_RECT: ${secondSelectedRect.toShortString()}"
-                            )
-
-                            leftRectProperty = secondSelectedRect.left
-                            rightRectProperty = secondSelectedRect.right
-                            secondSelectedRect.apply {
-                                left = calculateMovingViewOffset(
-                                    AnimatedRectProperties.LEFT,
-                                    event.x,
-                                    leftRectProperty,
-                                    rightRectProperty,
-                                    leftRectProperty
-                                )
-                                right = calculateMovingViewOffset(
-                                    AnimatedRectProperties.RIGHT,
-                                    event.x,
-                                    leftRectProperty,
-                                    rightRectProperty,
-                                    rightRectProperty
-                                )
-                            }
-                            Log.d(
-                                "ACTION_MOVE",
-                                "RIGHT_RECT: ${secondSelectedRect.toShortString()}"
-                            )
-                        }
-                        NONE_RECT -> {
-                            // Ignore. No requirement.
+                            indexContainer.secondNewIndex = nextOptionPosition
                         }
                     }
-                    invalidate()
+
+                    nextOption.isSelected = true
+                    if (!firstSelectedRect.contains(previousOption.coordinateRect)
+                        && !secondSelectedRect.contains(previousOption.coordinateRect)
+                    ) {
+                        previousOption.isSelected = false
+                    }
+                } else if (distanceToNextPoint > 0f && distanceToPreviousPoint == 0f) {
+                    if (direction != oldDirection) {
+                        setupPositionsForMove(previousOptionPosition, direction)
+                    }
                 }
-                true
+
+                oldDirection = direction
+                downPointX = event.rawX
+                invalidate()
             }
             else -> {
-                super.onTouchEvent(event)
+                return super.onTouchEvent(event)
+            }
+        }
+
+        return true
+    }
+
+    private fun calculateDistanceBetweenPoints(centerX: Float, width: Float): Float {
+        return max(abs(downPointX - centerX) - width / 1.5f, 0f)
+    }
+
+    private fun setupPositionsForMove(index: Int, direction: Direction) {
+        val next: Int
+
+        when (direction) {
+            Direction.TO_LEFT -> {
+                next = index - 1
+                nextOptionPosition = if (next > -1) {
+                    previousOptionPosition = index
+                    next
+                } else {
+                    previousOptionPosition = index + 1
+                    index
+                }
+            }
+            Direction.TO_RIGHT -> {
+                next = index + 1
+                nextOptionPosition = if (next < options.size) {
+                    previousOptionPosition = index
+                    next
+                } else {
+                    previousOptionPosition = index - 1
+                    index
+                }
+            }
+            Direction.UNDEFINED -> {
+                // Ignore.
             }
         }
     }
 
-    private fun calculateMovingViewOffset(
-        property: AnimatedRectProperties,
-        x: Float,
-        currentLeft: Float,
-        currentRight: Float,
-        currentValue: Float
-    ): Float {
-        val offset = (x - currentLeft) + (x - currentRight)
-        return when (property) {
-            AnimatedRectProperties.LEFT -> currentValue - offset
-            AnimatedRectProperties.RIGHT -> currentValue + offset
-            AnimatedRectProperties.DEFAULT -> {
-                // Ignore.
-                0f
+    private fun moveSelectedRectangle(rect: RectF, offset: Float) {
+        val newLeft = rect.left - offset
+        val newRight = rect.right - offset
+        if (newLeft - additionalPadding > 0 && newRight + additionalPadding < viewBounds.width()) {
+            rect.left = newLeft
+            rect.right = newRight
+        }
+    }
+
+    private fun updateSelectedRectangle() {
+        val index: Int
+        var selectedRect: RectF? = null
+        var newSelectedRect: RectF? = null
+
+        when (rectangleToMove) {
+            LEFT_RECT -> {
+                index = indexContainer.firstNewIndex
+                newSelectedRect = options[index].second.coordinateRect
+                selectedRect = firstSelectedRect
+            }
+            RIGHT_RECT -> {
+                index = indexContainer.secondNewIndex
+                newSelectedRect = options[index].second.coordinateRect
+                selectedRect = secondSelectedRect
             }
         }
+
+        selectedRect?.left = newSelectedRect?.left
+        selectedRect?.right = newSelectedRect?.right
+
+        options[indexContainer.firstPreviousIndex].second.isSelected = false
+        options[indexContainer.secondPreviousIndex].second.isSelected = false
+        options[indexContainer.firstNewIndex].second.isSelected = true
+        options[indexContainer.secondNewIndex].second.isSelected = true
+
+        indexContainer.firstPreviousIndex = indexContainer.firstNewIndex
+        indexContainer.secondPreviousIndex = indexContainer.secondNewIndex
     }
 
     private fun vibrateSlightly() {
@@ -848,6 +892,7 @@ class RangePickerView : View {
             indexContainer.firstDefaultIndex = position.first
             indexContainer.secondDefaultIndex = position.second
             updateSelectedIndexes(position)
+            updateSelectedIndexes()
             options[position.first].second.isSelected = true
             options[position.second].second.isSelected = true
         } else {
@@ -896,7 +941,6 @@ class RangePickerView : View {
         private const val DO_NOT_REPEAT_PATTERN = -1
 
         private const val DEFAULT_ANIMATION_DURATION = 200L
-        private const val DEFAULT_THRESHOLD = 30.0f
 
         private const val SUPER_STATE = "superState"
         private const val FIRST_SELECTED_INDEX = "firstSelectedIndex"

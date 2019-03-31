@@ -1,4 +1,4 @@
-package yaroslav.ovdiienko.idivision.rangepickerview.rangepicker.model
+package yaroslav.ovdiienko.idivision.rangepickerview.rangepicker.model.enums
 
 
 enum class OptionsState(val tapId: Int) {

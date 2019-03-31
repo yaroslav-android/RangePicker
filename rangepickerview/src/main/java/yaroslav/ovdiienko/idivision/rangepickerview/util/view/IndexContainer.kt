@@ -1,4 +1,6 @@
-package yaroslav.ovdiienko.idivision.rangepickerview.rangepicker.model
+package yaroslav.ovdiienko.idivision.rangepickerview.util.view
+
+import yaroslav.ovdiienko.idivision.rangepickerview.rangepicker.model.enums.OptionsState
 
 
 class IndexContainer {
