@@ -468,7 +468,7 @@ class RangePickerView : View {
     }
 
     private fun requestDisallowInterceptTouchEvent() {
-        if (touchMode == TouchMode.TOUCH_MODE_DOWN) {
+        if (touchMode == TouchMode.TOUCH_MODE_DOWN && rectangleToMove != NONE_RECT) {
             parent.requestDisallowInterceptTouchEvent(true)
             touchMode = TouchMode.TOUCH_MODE_DRAGGING
         }
@@ -597,15 +597,16 @@ class RangePickerView : View {
 
     override fun performClick(): Boolean {
         super.performClick()
-        if (!isActionMove) {
-            rangeSelectedListener?.let { listener ->
-                val leftPoint =
-                    indexContainer.firstNewIndex to options[indexContainer.firstNewIndex].first.getOption()
-                val rightPoint =
-                    indexContainer.secondNewIndex to options[indexContainer.secondNewIndex].first.getOption()
 
-                listener.onRangeSelected(this, leftPoint, rightPoint)
-            }
+        rangeSelectedListener?.let { listener ->
+            val leftPoint =
+                indexContainer.firstNewIndex to options[indexContainer.firstNewIndex].first.getOption()
+            val rightPoint =
+                indexContainer.secondNewIndex to options[indexContainer.secondNewIndex].first.getOption()
+
+            listener.onRangeSelected(this, leftPoint, rightPoint)
+        }
+        if (!isActionMove) {
             animateView()
             if (optionsState == OptionsState.MULTIPLE) optionsState = OptionsState.NONE
         }

@@ -16,7 +16,11 @@ class MainActivity : AppCompatActivity() {
             setOptions(getOptions())
             setDefaultSelectedPositions(0 to 4)
             setOnRangeSelectedListener { view, leftPoint, rightPoint ->
-
+                Toast.makeText(
+                    this@MainActivity,
+                    view.getSelectedIndexes().toString(),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
 
