@@ -15,6 +15,9 @@ class MainActivity : AppCompatActivity() {
         picker.apply {
             setOptions(getOptions())
             setDefaultSelectedPositions(0 to 4)
+            setOnRangeSelectedListener { view, leftPoint, rightPoint ->
+
+            }
         }
 
         btn_get_values.setOnClickListener {

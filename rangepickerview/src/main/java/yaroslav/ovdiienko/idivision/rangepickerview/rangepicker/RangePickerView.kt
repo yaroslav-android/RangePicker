@@ -18,12 +18,15 @@ import android.view.View
 import android.view.ViewConfiguration
 import android.view.WindowManager
 import android.view.animation.AccelerateDecelerateInterpolator
-import yaroslav.ovdiienko.idivision.rangepickerview.rangepicker.model.*
+import yaroslav.ovdiienko.idivision.rangepickerview.rangepicker.model.AnimatableRectF
+import yaroslav.ovdiienko.idivision.rangepickerview.rangepicker.model.Option
+import yaroslav.ovdiienko.idivision.rangepickerview.rangepicker.model.RectShape
+import yaroslav.ovdiienko.idivision.rangepickerview.rangepicker.model.enums.AnimatedRectProperties
 import yaroslav.ovdiienko.idivision.rangepickerview.rangepicker.model.enums.Direction
 import yaroslav.ovdiienko.idivision.rangepickerview.rangepicker.model.enums.OptionsState
-import yaroslav.ovdiienko.idivision.rangepickerview.util.*
+import yaroslav.ovdiienko.idivision.rangepickerview.rangepicker.model.enums.TouchMode
+import yaroslav.ovdiienko.idivision.rangepickerview.util.DisplayUtils
 import yaroslav.ovdiienko.idivision.rangepickerview.util.extension.addAnimationEndListener
-import yaroslav.ovdiienko.idivision.rangepickerview.rangepicker.model.enums.AnimatedRectProperties
 import yaroslav.ovdiienko.idivision.rangepickerview.util.view.AttributeSetParser
 import yaroslav.ovdiienko.idivision.rangepickerview.util.view.IndexContainer
 import kotlin.math.abs
@@ -75,6 +78,7 @@ class RangePickerView : View {
     private var previousOptionPosition = UNDEFINED_POSITION
     private var nextOption: RectShape = RectShape()
     private var previousOption: RectShape = RectShape()
+    private var touchMode = TouchMode.TOUCH_MODE_IDLE
 
     private var rangeSelectedListener: OnRangeSelectedListener? = null
 
@@ -366,6 +370,7 @@ class RangePickerView : View {
                     }
                     else -> NONE_RECT
                 }
+                touchMode = TouchMode.TOUCH_MODE_DOWN
             }
             MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
                 if (!isActionMove) {
@@ -378,11 +383,12 @@ class RangePickerView : View {
                     previousOptionPosition = UNDEFINED_POSITION
                 }
 
+                super.onTouchEvent(event)
                 performClick()
-                isActionMove = false
             }
             MotionEvent.ACTION_MOVE -> {
                 isActionMove = true
+                requestDisallowInterceptTouchEvent()
                 val delta = downPointX - event.rawX
                 val direction =
                     if (delta > 0) Direction.TO_LEFT else Direction.TO_RIGHT
@@ -459,6 +465,13 @@ class RangePickerView : View {
         }
 
         return true
+    }
+
+    private fun requestDisallowInterceptTouchEvent() {
+        if (touchMode == TouchMode.TOUCH_MODE_DOWN) {
+            parent.requestDisallowInterceptTouchEvent(true)
+            touchMode = TouchMode.TOUCH_MODE_DRAGGING
+        }
     }
 
     private fun calculateDistanceBetweenPoints(centerX: Float, width: Float): Float {
@@ -596,6 +609,8 @@ class RangePickerView : View {
             animateView()
             if (optionsState == OptionsState.MULTIPLE) optionsState = OptionsState.NONE
         }
+        isActionMove = false
+        touchMode = TouchMode.TOUCH_MODE_IDLE
         return true
     }
 
