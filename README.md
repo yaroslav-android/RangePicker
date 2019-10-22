@@ -28,6 +28,7 @@ In **Table 1** you could see list of available attributes.
 - [ ] Add possibility to change view properties programatically
 - [x] Allow set default selected items by position
 - [x] Add change listener
+- [ ] Test coverage
 
 **Dependencies:**</br>
 Maven:
