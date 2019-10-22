@@ -32,7 +32,7 @@ import yaroslav.ovdiienko.idivision.rangepickerview.util.view.IndexContainer
 import kotlin.math.abs
 import kotlin.math.max
 
-
+@Deprecated("RangePickerView is no more valid. Please replace it with ScopePikerView.")
 class RangePickerView : View {
     private val rectangleBackgroundPaint: Paint = Paint()
     private val lineBackgroundPaint: Paint = Paint()

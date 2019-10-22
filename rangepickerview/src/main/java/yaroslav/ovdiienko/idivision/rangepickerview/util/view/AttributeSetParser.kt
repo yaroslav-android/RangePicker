@@ -11,7 +11,7 @@ import yaroslav.ovdiienko.idivision.rangepickerview.R
 import yaroslav.ovdiienko.idivision.rangepickerview.rangepicker.RangePickerView
 import yaroslav.ovdiienko.idivision.rangepickerview.rangepicker.RangePickerView.Companion.DEFAULT_TEXT_SIZE
 
-
+@Deprecated("RangePickerView is no more valid. Please replace it with ScopePikerView.")
 class AttributeSetParser(private val context: Context, attributeSet: AttributeSet?) {
     private val displayMetrics = context.resources.displayMetrics
 

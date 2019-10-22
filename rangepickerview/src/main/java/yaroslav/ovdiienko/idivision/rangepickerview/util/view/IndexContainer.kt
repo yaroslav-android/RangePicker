@@ -2,7 +2,7 @@ package yaroslav.ovdiienko.idivision.rangepickerview.util.view
 
 import yaroslav.ovdiienko.idivision.rangepickerview.rangepicker.model.enums.OptionsState
 
-
+@Deprecated("RangePickerView is no more valid. Please replace it with ScopePikerView.")
 class IndexContainer {
     var firstPreviousIndex: Int = -1
     var secondPreviousIndex: Int = -1
