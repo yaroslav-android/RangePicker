@@ -34,4 +34,3 @@ jobs:
           name: Build debug APK and release APK
           command: |
           ./gradlew :app:assembleDebugAndroidTest
-          # ./gradlew :app:assembleDebug - no need to assemble release
