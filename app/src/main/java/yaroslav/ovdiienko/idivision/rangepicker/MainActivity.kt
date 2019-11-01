@@ -12,14 +12,19 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+//        oldView()
+        newView()
+    }
+
+    private fun oldView() {
         picker.apply {
             setOptions(getOptions())
             setDefaultSelectedPositions(0 to 4)
             setOnRangeSelectedListener { view, leftPoint, rightPoint ->
                 Toast.makeText(
-                    this@MainActivity,
-                    view.getSelectedIndexes().toString(),
-                    Toast.LENGTH_SHORT
+                        this@MainActivity,
+                        view.getSelectedIndexes().toString(),
+                        Toast.LENGTH_SHORT
                 ).show()
             }
         }
@@ -28,6 +33,10 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, "${picker.getSelectedItems()}", Toast.LENGTH_SHORT).show()
             picker.resetToDefaultState()
         }
+    }
+
+    private fun newView() {
+
     }
 
     private fun getOptions(): List<Option> {

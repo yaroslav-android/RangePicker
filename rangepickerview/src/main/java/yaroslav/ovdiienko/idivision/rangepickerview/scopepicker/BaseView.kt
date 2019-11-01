@@ -1,4 +1,4 @@
-package yaroslav.ovdiienko.idivision.rangepickerview.rangepicker
+package yaroslav.ovdiienko.idivision.rangepickerview.scopepicker
 
 import android.annotation.TargetApi
 import android.content.Context
@@ -14,6 +14,4 @@ open class BaseView : View {
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int)
             : super(context, attrs, defStyleAttr, defStyleRes)
-
-
 }
