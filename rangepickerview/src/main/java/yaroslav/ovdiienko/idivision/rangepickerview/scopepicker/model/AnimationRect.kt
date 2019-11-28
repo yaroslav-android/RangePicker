@@ -1,21 +1,13 @@
-package yaroslav.ovdiienko.idivision.rangepickerview.rangepicker.model
+package yaroslav.ovdiienko.idivision.rangepickerview.scopepicker.model
 
 import android.graphics.Rect
 import android.graphics.RectF
 
 
-class AnimatableRectF : RectF {
+class AnimationRect : RectF {
     constructor() : super()
-
-    constructor(left: Float, top: Float, right: Float, bottom: Float) : super(
-        left,
-        top,
-        right,
-        bottom
-    )
-
+    constructor(left: Float, top: Float, right: Float, bottom: Float) : super(left, top, right, bottom)
     constructor(r: RectF) : super(r)
-
     constructor(r: Rect) : super(r)
 
     fun setTop(top: Float) {

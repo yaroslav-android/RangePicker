@@ -18,19 +18,21 @@ import android.view.View
 import android.view.ViewConfiguration
 import android.view.WindowManager
 import android.view.animation.AccelerateDecelerateInterpolator
-import yaroslav.ovdiienko.idivision.rangepickerview.rangepicker.model.AnimatableRectF
+import yaroslav.ovdiienko.idivision.rangepickerview.scopepicker.model.AnimationRect
 import yaroslav.ovdiienko.idivision.rangepickerview.rangepicker.model.Option
 import yaroslav.ovdiienko.idivision.rangepickerview.rangepicker.model.RectShape
 import yaroslav.ovdiienko.idivision.rangepickerview.rangepicker.model.enums.AnimatedRectProperties
 import yaroslav.ovdiienko.idivision.rangepickerview.rangepicker.model.enums.Direction
 import yaroslav.ovdiienko.idivision.rangepickerview.rangepicker.model.enums.OptionsState
 import yaroslav.ovdiienko.idivision.rangepickerview.rangepicker.model.enums.TouchMode
+import yaroslav.ovdiienko.idivision.rangepickerview.util.Dimension
 import yaroslav.ovdiienko.idivision.rangepickerview.util.DisplayUtils
 import yaroslav.ovdiienko.idivision.rangepickerview.util.extension.addAnimationEndListener
 import yaroslav.ovdiienko.idivision.rangepickerview.util.view.AttributeSetParser
 import yaroslav.ovdiienko.idivision.rangepickerview.util.view.IndexContainer
 import kotlin.math.abs
 import kotlin.math.max
+import kotlin.math.min
 
 @Deprecated("RangePickerView is no more valid. Please replace it with ScopePikerView.")
 class RangePickerView : View {
@@ -38,9 +40,9 @@ class RangePickerView : View {
     private val lineBackgroundPaint: Paint = Paint()
     private val textPaint: Paint = Paint()
     private val firstSelectedRect =
-        AnimatableRectF()
+        AnimationRect()
     private val secondSelectedRect =
-        AnimatableRectF()
+        AnimationRect()
     private val viewBounds = Rect()
 
     private var backgroundSelectedTint: Int = 0
@@ -50,7 +52,7 @@ class RangePickerView : View {
     private var stripThickness: Float = 0f
 
     private val options: MutableList<Pair<Option, RectShape>> = mutableListOf()
-    private val displayUtils: DisplayUtils =
+    private val displayUtils: Dimension =
         DisplayUtils(context.getSystemService(Context.WINDOW_SERVICE) as WindowManager)
     private var touchSlop: Int = 0
 
@@ -164,7 +166,7 @@ class RangePickerView : View {
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        minimumHeight = displayUtils.convertDpToPx(DEFAULT_MIN_HEIGHT)
+        minimumHeight = displayUtils.toDp(DEFAULT_MIN_HEIGHT.toFloat()).toInt()
         val desiredWidth =
             suggestedMinimumWidth + paddingLeft + paddingRight
         val desiredHeight =
@@ -181,15 +183,15 @@ class RangePickerView : View {
 
     private fun measureDimension(desiredSize: Int, measureSpec: Int): Int {
         var result: Int
-        val specMode = View.MeasureSpec.getMode(measureSpec)
-        val specSize = View.MeasureSpec.getSize(measureSpec)
+        val specMode = MeasureSpec.getMode(measureSpec)
+        val specSize = MeasureSpec.getSize(measureSpec)
 
-        if (specMode == View.MeasureSpec.EXACTLY) {
+        if (specMode == MeasureSpec.EXACTLY) {
             result = specSize
         } else {
             result = desiredSize
-            if (specMode == View.MeasureSpec.AT_MOST) {
-                result = Math.min(result, specSize)
+            if (specMode == MeasureSpec.AT_MOST) {
+                result = min(result, specSize)
             }
         }
 
@@ -671,7 +673,7 @@ class RangePickerView : View {
 
     private fun getObjectAnimation(
         property: AnimatedRectProperties,
-        oldRect: AnimatableRectF,
+        oldRect: AnimationRect,
         rect: RectF,
         duration: Long,
         listener: ValueAnimator.AnimatorUpdateListener? = null
