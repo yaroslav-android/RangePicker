@@ -20,16 +20,17 @@ fun Paint.applyTextSettings() {
     }
 }
 
-fun Paint.applySelectedBoxSettings() {
+fun Paint.applyStripSettings() {
     this.apply {
         isAntiAlias = true
         style = Paint.Style.FILL
     }
 }
 
-fun Paint.applyStripSettings() {
+fun Paint.applySelectedBoxSettings() {
     this.apply {
         isAntiAlias = true
         style = Paint.Style.FILL
+        color = Color.BLUE
     }
 }

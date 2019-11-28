@@ -15,17 +15,19 @@ import yaroslav.ovdiienko.idivision.rangepickerview.scopepicker.model.exceptions
 import yaroslav.ovdiienko.idivision.rangepickerview.util.Dimension
 import yaroslav.ovdiienko.idivision.rangepickerview.util.DisplayUtils
 import yaroslav.ovdiienko.idivision.rangepickerview.util.TouchAssistant
+import yaroslav.ovdiienko.idivision.rangepickerview.util.extension.drawOnce
+import yaroslav.ovdiienko.idivision.rangepickerview.util.extension.requestDisallowInterceptTouchEvent
 import yaroslav.ovdiienko.idivision.rangepickerview.util.view.ViewAttributes
 
 
 class ScopePickerView @JvmOverloads constructor(
-        context: Context,
-        attrs: AttributeSet? = null,
-        defStyleAttr: Int = 0
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
 ) : BaseView(context, attrs, defStyleAttr), PickerAgreement {
 
     private val dimension: Dimension =
-            DisplayUtils(context.getSystemService(Context.WINDOW_SERVICE) as WindowManager)
+        DisplayUtils(context.getSystemService(Context.WINDOW_SERVICE) as WindowManager)
     private val viewBounds = Rect()
     private val viewAttributes = ViewAttributes()
     private val touchAssistant = TouchAssistant()
@@ -37,10 +39,10 @@ class ScopePickerView @JvmOverloads constructor(
     private var mode: Mode = Mode.Duo
     private val data: LinkedHashMap<Int, State> = LinkedHashMap()
 
-    private var isFirstDraw = true
+    internal var isFirstDraw = true
 
     init {
-        val parser = ViewAttributes.Parser(attrs)
+        val parser = ViewAttributes.Parser(context, attrs)
         viewAttributes.applyValues(parser)
     }
 
@@ -51,12 +53,21 @@ class ScopePickerView @JvmOverloads constructor(
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         drawOnce {
-
+            // skip for now.
         }
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        return super.onTouchEvent(event)
+        when (event.actionMasked) {
+            MotionEvent.ACTION_DOWN -> {
+            }
+            MotionEvent.ACTION_MOVE -> {
+                requestDisallowInterceptTouchEvent()
+                invalidate()
+            }
+            else -> return super.onTouchEvent(event)
+        }
+        return true
     }
 
     override fun performClick(): Boolean {
@@ -66,15 +77,17 @@ class ScopePickerView @JvmOverloads constructor(
     override fun setOptions(options: List<String>) {
         if (MAX_ELEMENTS_ALLOWED < options.size) {
             throw MaxSizeException(
-                    "Maximum available size is $MAX_ELEMENTS_ALLOWED elements, " +
-                            "current size is ${options.size} elements")
+                "Maximum available size is $MAX_ELEMENTS_ALLOWED elements, " +
+                        "current size is ${options.size} elements"
+            )
         }
 
         options.forEach { word ->
             if (MAX_LETTERS_IN_WORD_ALLOWED < word.length) {
                 throw MaxWordLengthException(
-                        "Maximum word length is $MAX_LETTERS_IN_WORD_ALLOWED characters, " +
-                                "current word \"$word\" length is ${word.length} characters")
+                    "Maximum word length is $MAX_LETTERS_IN_WORD_ALLOWED characters, " +
+                            "current word \"$word\" length is ${word.length} characters"
+                )
             }
         }
     }
@@ -85,13 +98,6 @@ class ScopePickerView @JvmOverloads constructor(
 
     private fun reset() {
         isFirstDraw = true
-    }
-
-    private fun drawOnce(drawBlock: () -> Unit) {
-        if (isFirstDraw) {
-            drawBlock.invoke()
-            isFirstDraw = false
-        }
     }
 
     companion object {
