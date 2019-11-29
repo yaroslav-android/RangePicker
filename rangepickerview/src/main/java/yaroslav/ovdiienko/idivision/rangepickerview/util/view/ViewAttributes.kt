@@ -6,6 +6,7 @@ import android.graphics.Typeface
 import android.util.AttributeSet
 import androidx.core.content.ContextCompat
 import yaroslav.ovdiienko.idivision.rangepickerview.R
+import yaroslav.ovdiienko.idivision.rangepickerview.scopepicker.model.enums.Mode
 import yaroslav.ovdiienko.idivision.rangepickerview.util.extension.dp
 import yaroslav.ovdiienko.idivision.rangepickerview.util.extension.getFont
 import yaroslav.ovdiienko.idivision.rangepickerview.util.extension.sp
@@ -35,6 +36,8 @@ class ViewAttributes {
 
     var fontFamily: Typeface? = null
         private set
+
+    var mode: Mode = Mode.Duo
 
     fun applyValues(newValues: Parser) {
         newValues.parse(this)
@@ -76,9 +79,16 @@ class ViewAttributes {
                 stripThickness = getStripThickness()
                 textSize = getTextSize()
                 fontFamily = getFontRes()
+                mode = getModes()
             }
 
             typedAttributes?.recycle()
+        }
+
+        private fun getModes(): Mode {
+            return with(typedAttributes?.getInt(R.styleable.ScopePickerView_mode, 2)) {
+                if (this == 1) Mode.Single else Mode.Duo
+            }
         }
 
         private fun getPointerBackgroundColor(): Int {

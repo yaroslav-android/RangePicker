@@ -36,7 +36,6 @@ class ScopePickerView @JvmOverloads constructor(
     private val leftBox = AnimationRect()
     private val rightBox = AnimationRect()
 
-    private var mode: Mode = Mode.Duo
     private val data: LinkedHashMap<Int, State> = LinkedHashMap()
 
     internal var isFirstDraw = true
@@ -52,9 +51,27 @@ class ScopePickerView @JvmOverloads constructor(
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
+
         drawOnce {
             // skip for now.
         }
+
+        when (viewAttributes.mode) {
+            Mode.Single -> {
+                drawSingleChoiceView()
+            }
+            Mode.Duo -> {
+                drawDualChoiceView()
+            }
+        }
+    }
+
+    private fun drawSingleChoiceView() {
+        // TODO: only one point to draw and set/get options
+    }
+
+    private fun drawDualChoiceView() {
+        // TODO: the same behaviour as in Range Picker View
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
@@ -93,7 +110,7 @@ class ScopePickerView @JvmOverloads constructor(
     }
 
     override fun changeMode(mode: Mode) {
-        this.mode = mode
+        viewAttributes.mode = mode
     }
 
     private fun reset() {
