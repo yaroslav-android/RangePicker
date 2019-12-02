@@ -16,6 +16,7 @@ import yaroslav.ovdiienko.idivision.rangepickerview.util.Dimension
 import yaroslav.ovdiienko.idivision.rangepickerview.util.DisplayUtils
 import yaroslav.ovdiienko.idivision.rangepickerview.util.TouchAssistant
 import yaroslav.ovdiienko.idivision.rangepickerview.util.extension.drawOnce
+import yaroslav.ovdiienko.idivision.rangepickerview.util.extension.requestAllowInterceptTouchEvent
 import yaroslav.ovdiienko.idivision.rangepickerview.util.extension.requestDisallowInterceptTouchEvent
 import yaroslav.ovdiienko.idivision.rangepickerview.util.view.ViewAttributes
 
@@ -81,6 +82,15 @@ class ScopePickerView @JvmOverloads constructor(
             MotionEvent.ACTION_MOVE -> {
                 requestDisallowInterceptTouchEvent()
                 invalidate()
+            }
+            MotionEvent.ACTION_UP -> {
+                performClick()
+                requestAllowInterceptTouchEvent()
+                super.onTouchEvent(event)
+            }
+            MotionEvent.ACTION_CANCEL -> {
+                super.onTouchEvent(event)
+                requestAllowInterceptTouchEvent()
             }
             else -> return super.onTouchEvent(event)
         }

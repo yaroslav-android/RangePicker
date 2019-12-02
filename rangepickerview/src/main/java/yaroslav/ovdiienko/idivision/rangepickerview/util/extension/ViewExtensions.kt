@@ -14,3 +14,7 @@ internal fun ScopePickerView.drawOnce(drawBlock: () -> Unit) {
 internal fun ScopePickerView.requestDisallowInterceptTouchEvent() {
     parent.requestDisallowInterceptTouchEvent(true)
 }
+
+internal fun ScopePickerView.requestAllowInterceptTouchEvent() {
+    parent.requestDisallowInterceptTouchEvent(false)
+}
