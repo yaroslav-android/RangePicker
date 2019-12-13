@@ -4,27 +4,30 @@ import android.content.Context
 import android.content.res.Resources
 import android.graphics.Typeface
 import android.os.Build
+import android.util.Log
 import android.util.TypedValue
 import androidx.core.content.res.ResourcesCompat
+import yaroslav.ovdiienko.idivision.rangepickerview.scopepicker.ScopePickerView
+import yaroslav.ovdiienko.idivision.rangepickerview.scopepicker.ScopePickerView.Companion.DEBUG
 
 
-fun buildVersionGE(version: Int): Boolean = Build.VERSION.SDK_INT >= version
+internal fun buildVersionGE(version: Int): Boolean = Build.VERSION.SDK_INT >= version
 
-val Float.dp: Float
+internal val Float.dp: Float
     get() = TypedValue.applyDimension(
         TypedValue.COMPLEX_UNIT_DIP,
         this,
         Resources.getSystem().displayMetrics
     )
 
-val Float.sp: Float
+internal val Float.sp: Float
     get() = TypedValue.applyDimension(
         TypedValue.COMPLEX_UNIT_SP,
         this,
         Resources.getSystem().displayMetrics
     )
 
-fun Context.getFont(fontResId: Int): Typeface? {
+internal fun Context.getFont(fontResId: Int): Typeface? {
     return try {
         if (buildVersionGE(Build.VERSION_CODES.O)) {
             resources.getFont(fontResId)
@@ -39,4 +42,12 @@ fun Context.getFont(fontResId: Int): Typeface? {
             else -> font
         }
     }
+}
+
+internal fun ScopePickerView.log(tag: String = "SPV/Default", msg: () -> String) {
+    if (DEBUG) Log.d(tag, msg.invoke())
+}
+
+internal fun ScopePickerView.debugAction(action: () -> Unit) {
+    if (DEBUG) action.invoke()
 }
