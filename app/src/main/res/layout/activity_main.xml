@@ -30,6 +30,7 @@
         app:cornerRadius="5dp" />
 
     <yaroslav.ovdiienko.idivision.rangepickerview.scopepicker.ScopePickerView
+        android:id="@+id/spv"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginLeft="16dp"

@@ -4,7 +4,11 @@ import yaroslav.ovdiienko.idivision.rangepickerview.scopepicker.model.enums.Mode
 
 // TODO: provide documentation
 interface PickerAgreement {
+
+    /***/
     fun setOptions(options: List<String>)
+
+    /***/
     fun changeMode(mode: Mode)
 
     // Planned:
