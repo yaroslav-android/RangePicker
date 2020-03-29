@@ -1,6 +1,7 @@
 package yaroslav.ovdiienko.idivision.rangepickerview.scopepicker
 
 import android.content.Context
+import android.content.res.Configuration
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Rect
@@ -15,8 +16,7 @@ import yaroslav.ovdiienko.idivision.rangepickerview.scopepicker.model.exceptions
 import yaroslav.ovdiienko.idivision.rangepickerview.util.Dimension
 import yaroslav.ovdiienko.idivision.rangepickerview.util.DisplayUtils
 import yaroslav.ovdiienko.idivision.rangepickerview.util.TouchAssistant
-import yaroslav.ovdiienko.idivision.rangepickerview.util.extension.drawOnce
-import yaroslav.ovdiienko.idivision.rangepickerview.util.extension.requestDisallowInterceptTouchEvent
+import yaroslav.ovdiienko.idivision.rangepickerview.util.extension.*
 import yaroslav.ovdiienko.idivision.rangepickerview.util.view.ViewAttributes
 
 
@@ -25,6 +25,9 @@ class ScopePickerView @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : BaseView(context, attrs, defStyleAttr), PickerAgreement {
+
+    internal var isFirstDraw = true
+    private val data: LinkedHashMap<Int, State> = LinkedHashMap()
 
     private val dimension: Dimension =
         DisplayUtils(context.getSystemService(Context.WINDOW_SERVICE) as WindowManager)
@@ -36,10 +39,6 @@ class ScopePickerView @JvmOverloads constructor(
     private val leftBox = AnimationRect()
     private val rightBox = AnimationRect()
 
-    private var mode: Mode = Mode.Duo
-    private val data: LinkedHashMap<Int, State> = LinkedHashMap()
-
-    internal var isFirstDraw = true
 
     init {
         val parser = ViewAttributes.Parser(context, attrs)
@@ -52,9 +51,32 @@ class ScopePickerView @JvmOverloads constructor(
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        drawOnce {
-            // skip for now.
+
+        debugAction {
+
         }
+
+        drawOnce {
+            log { "click rectangles drawn" }
+            // only for drawing clickable rectangles.
+        }
+
+        when (viewAttributes.mode) {
+            Mode.Single -> {
+                drawSingleChoiceView()
+            }
+            Mode.Duo -> {
+                drawDualChoiceView()
+            }
+        }
+    }
+
+    private fun drawSingleChoiceView() {
+        // TODO: only one point to draw and set/get options
+    }
+
+    private fun drawDualChoiceView() {
+        // TODO: the same behaviour as in Range Picker View
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
@@ -93,15 +115,24 @@ class ScopePickerView @JvmOverloads constructor(
     }
 
     override fun changeMode(mode: Mode) {
-        this.mode = mode
+        log { "view mode changed to $mode" }
+        viewAttributes.mode = mode
     }
 
     private fun reset() {
+        log { "view reset triggered" }
         isFirstDraw = true
     }
 
+    override fun onConfigurationChanged(newConfig: Configuration?) {
+        super.onConfigurationChanged(newConfig)
+        reset()
+    }
+
     companion object {
-        const val MAX_ELEMENTS_ALLOWED = 5
-        const val MAX_LETTERS_IN_WORD_ALLOWED = 15
+        internal const val MAX_ELEMENTS_ALLOWED = 5
+        internal const val MAX_LETTERS_IN_WORD_ALLOWED = 15
+
+        internal const val DEBUG = true
     }
 }
