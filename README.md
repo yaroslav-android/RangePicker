@@ -1,8 +1,7 @@
-# RangePicker
-Custom Range Picker view with modern design.</br> [![](https://jitpack.io/v/yaroslav-android/RangePicker.svg)](https://jitpack.io/#yaroslav-android/RangePicker)
+# RangePicker [![](https://jitpack.io/v/yaroslav-android/RangePicker.svg)](https://jitpack.io/#yaroslav-android/RangePicker)
 <p align="center">
 	<kbd>
- 		<img src="https://github.com/yaroslav-android/RangePicker/blob/master/assets/ezgif.com-video-to-gif.gif" alt="preview"/>
+ 		<img src="https://github.com/yaroslav-android/RangePicker/blob/master/assets/ezgif.com-video-to-gif.gif" alt="preview" width="350" height="620"/>
 	</kbd>
 </p>
 

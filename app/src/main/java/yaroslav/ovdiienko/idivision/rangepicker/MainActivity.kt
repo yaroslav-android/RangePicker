@@ -13,8 +13,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        oldView()
-//        newView()
+//        oldView()
+        newView()
     }
 
     private fun oldView() {
@@ -39,16 +39,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun newView() {
-
+        spv.apply {
+            setOptions(getOptionsStrings())
+        }
     }
 
     private fun getOptions(): List<Option> {
-        return listOf(
-            Option("Single"),
-            Option("2"),
-            Option("3"),
-            Option("4"),
-            Option("5+")
-        )
+        return getOptionsStrings().map { Option(it) }
     }
+
+    private fun getOptionsStrings() = listOf("Single", "2", "3", "4", "5+")
 }
