@@ -5,32 +5,32 @@ import android.graphics.Paint
 
 
 fun Paint.applySelectedTextSettings() {
-    this.apply {
-        isAntiAlias = true
-        style = Paint.Style.FILL
-        color = Color.parseColor("#ff000000")
-    }
+  this.apply {
+    isAntiAlias = true
+    style = Paint.Style.FILL
+    color = Color.parseColor("#ff000000")
+  }
 }
 
 fun Paint.applyTextSettings() {
-    this.apply {
-        isAntiAlias = true
-        style = Paint.Style.FILL
-        color = Color.parseColor("#ff000000")
-    }
+  this.apply {
+    isAntiAlias = true
+    style = Paint.Style.FILL
+    color = Color.parseColor("#ff000000")
+  }
 }
 
 fun Paint.applyStripSettings() {
-    this.apply {
-        isAntiAlias = true
-        style = Paint.Style.FILL
-    }
+  this.apply {
+    isAntiAlias = true
+    style = Paint.Style.FILL
+  }
 }
 
 fun Paint.applySelectedBoxSettings() {
-    this.apply {
-        isAntiAlias = true
-        style = Paint.Style.FILL
-        color = Color.BLUE
-    }
+  this.apply {
+    isAntiAlias = true
+    style = Paint.Style.FILL
+    color = Color.BLUE
+  }
 }

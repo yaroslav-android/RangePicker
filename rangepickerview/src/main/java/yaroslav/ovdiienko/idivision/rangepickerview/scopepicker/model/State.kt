@@ -5,8 +5,8 @@ import android.graphics.RectF
 
 
 data class State(
-        var coordinates: RectF = RectF(),
-        var text: String = "",
-        var textBounds: Rect = Rect(),
-        var isSelected: Boolean = false
+  var textCoordinates: RectF = RectF(),
+  var textPosition: Int = -1,
+  var textBounds: Rect = Rect(),
+  var isSelected: Boolean = false
 )

@@ -5,24 +5,30 @@ import android.graphics.RectF
 
 
 class AnimationRect : RectF {
-    constructor() : super()
-    constructor(left: Float, top: Float, right: Float, bottom: Float) : super(left, top, right, bottom)
-    constructor(r: RectF) : super(r)
-    constructor(r: Rect) : super(r)
+  constructor() : super()
+  constructor(left: Float, top: Float, right: Float, bottom: Float) : super(
+    left,
+    top,
+    right,
+    bottom
+  )
 
-    fun setTop(top: Float) {
-        this.top = top
-    }
+  constructor(r: RectF) : super(r)
+  constructor(r: Rect) : super(r)
 
-    fun setBottom(bottom: Float) {
-        this.bottom = bottom
-    }
+  fun setTop(top: Float) {
+    this.top = top
+  }
 
-    fun setRight(right: Float) {
-        this.right = right
-    }
+  fun setBottom(bottom: Float) {
+    this.bottom = bottom
+  }
 
-    fun setLeft(left: Float) {
-        this.left = left
-    }
+  fun setRight(right: Float) {
+    this.right = right
+  }
+
+  fun setLeft(left: Float) {
+    this.left = left
+  }
 }

@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun newView() {
         spv.apply {
-            setOptions(getOptionsStrings())
+            addOptions(getOptionsStrings())
         }
     }
 
