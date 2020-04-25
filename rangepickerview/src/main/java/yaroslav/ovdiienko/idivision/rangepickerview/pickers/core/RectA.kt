@@ -1,4 +1,4 @@
-package yaroslav.ovdiienko.idivision.rangepickerview.scopepicker.model
+package yaroslav.ovdiienko.idivision.rangepickerview.pickers.core
 
 import android.graphics.Rect
 import android.graphics.RectF

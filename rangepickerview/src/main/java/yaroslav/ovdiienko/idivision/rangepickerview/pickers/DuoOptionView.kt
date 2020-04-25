@@ -9,7 +9,7 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import yaroslav.ovdiienko.idivision.rangepickerview.pickers.core.BaseOptionsView
 import yaroslav.ovdiienko.idivision.rangepickerview.pickers.core.DuoAgreementExtension
-import yaroslav.ovdiienko.idivision.rangepickerview.scopepicker.model.RectA
+import yaroslav.ovdiienko.idivision.rangepickerview.pickers.core.RectA
 import yaroslav.ovdiienko.idivision.rangepickerview.util.extension.requestDisallowInterceptTouchEvent
 import yaroslav.ovdiienko.idivision.rangepickerview.util.extension.update
 
@@ -23,9 +23,12 @@ class DuoOptionView @JvmOverloads constructor(
 
   /* TODO: handle default style */
 
-  private val leftChip = RectA()
-  private val rightChip = RectA()
-  private var chipToMove = RectA()
+  private val leftChip =
+    RectA()
+  private val rightChip =
+    RectA()
+  private var chipToMove =
+    RectA()
 
   private val chipBackgroundPaint: Paint = getPaint()
   private val stripBackgroundPaint: Paint = getPaint()

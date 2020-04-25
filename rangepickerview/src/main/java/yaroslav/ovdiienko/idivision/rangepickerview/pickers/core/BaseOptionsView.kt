@@ -6,7 +6,7 @@ import android.graphics.Rect
 import android.util.AttributeSet
 import android.view.View
 import android.view.WindowManager
-import yaroslav.ovdiienko.idivision.rangepickerview.scopepicker.model.Options
+import yaroslav.ovdiienko.idivision.rangepickerview.pickers.models.Options
 import yaroslav.ovdiienko.idivision.rangepickerview.util.Dimension
 import yaroslav.ovdiienko.idivision.rangepickerview.util.DisplayUtils
 import yaroslav.ovdiienko.idivision.rangepickerview.util.view.ViewAttributes
@@ -24,7 +24,8 @@ abstract class BaseOptionsView @JvmOverloads constructor(
     DisplayUtils(context.getSystemService(Context.WINDOW_SERVICE) as WindowManager)
   protected val viewBounds = Rect()
 
-  protected val options: Options = Options()
+  protected val options: Options =
+    Options()
 
   init {
     val parser = ViewAttributes.Parser(context, dimension, attrs)

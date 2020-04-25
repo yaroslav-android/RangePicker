@@ -18,7 +18,7 @@ import android.view.View
 import android.view.ViewConfiguration
 import android.view.WindowManager
 import android.view.animation.AccelerateDecelerateInterpolator
-import yaroslav.ovdiienko.idivision.rangepickerview.scopepicker.model.RectA
+import yaroslav.ovdiienko.idivision.rangepickerview.pickers.core.RectA
 import yaroslav.ovdiienko.idivision.rangepickerview.rangepicker.model.Option
 import yaroslav.ovdiienko.idivision.rangepickerview.rangepicker.model.RectShape
 import yaroslav.ovdiienko.idivision.rangepickerview.rangepicker.model.enums.AnimatedRectProperties
@@ -39,8 +39,10 @@ class RangePickerView : View {
     private val rectangleBackgroundPaint: Paint = Paint()
     private val lineBackgroundPaint: Paint = Paint()
     private val textPaint: Paint = Paint()
-    private val firstSelectedRect = RectA()
-    private val secondSelectedRect = RectA()
+    private val firstSelectedRect =
+        RectA()
+    private val secondSelectedRect =
+        RectA()
     private val viewBounds = Rect()
 
     private var backgroundSelectedTint: Int = 0

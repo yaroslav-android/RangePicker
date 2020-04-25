@@ -1,4 +1,4 @@
-package yaroslav.ovdiienko.idivision.rangepickerview.scopepicker.model
+package yaroslav.ovdiienko.idivision.rangepickerview.pickers.models
 
 import yaroslav.ovdiienko.idivision.rangepickerview.util.exceptions.MaxOptionCharactersSizeException
 import yaroslav.ovdiienko.idivision.rangepickerview.util.exceptions.MaxOptionsSizeException

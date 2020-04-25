@@ -1,4 +1,4 @@
-package yaroslav.ovdiienko.idivision.rangepickerview.scopepicker.model
+package yaroslav.ovdiienko.idivision.rangepickerview.util
 
 
 import kotlin.math.abs
