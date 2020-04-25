@@ -6,12 +6,8 @@ import android.graphics.Typeface
 import android.util.AttributeSet
 import androidx.core.content.ContextCompat
 import yaroslav.ovdiienko.idivision.rangepickerview.R
-import yaroslav.ovdiienko.idivision.rangepickerview.scopepicker.strategy.DuoPickStrategy
-import yaroslav.ovdiienko.idivision.rangepickerview.scopepicker.strategy.SinglePickStrategy
-import yaroslav.ovdiienko.idivision.rangepickerview.scopepicker.strategy.Strategy
-import yaroslav.ovdiienko.idivision.rangepickerview.util.extension.dp
+import yaroslav.ovdiienko.idivision.rangepickerview.util.Dimension
 import yaroslav.ovdiienko.idivision.rangepickerview.util.extension.getFont
-import yaroslav.ovdiienko.idivision.rangepickerview.util.extension.sp
 
 
 class ViewAttributes {
@@ -39,13 +35,15 @@ class ViewAttributes {
   var fontFamily: Typeface? = null
     private set
 
-  var strategy: Strategy = DuoPickStrategy()
-
   fun applyValues(newValues: Parser) {
     newValues.parse(this)
   }
 
-  class Parser(private val context: Context, private val attrs: AttributeSet?) {
+  class Parser(
+    private val context: Context,
+    private val dimension: Dimension,
+    private val attrs: AttributeSet?
+  ) {
     private val typedAttributes: TypedArray? =
       context.obtainStyledAttributes(attrs, R.styleable.ScopePickerView)
 
@@ -63,11 +61,11 @@ class ViewAttributes {
       ContextCompat.getColor(context, R.color.colorGreyBgPiker)
     }
 
-    private val defaultStripThickness: Float by lazy { DEFAULT_STROKE_WIDTH.dp }
+    private val defaultStripThickness: Float by lazy { dimension.dpToPx(DEFAULT_STROKE_WIDTH) }
 
-    private val defaultPointerCornerRadius: Float by lazy { DEFAULT_CORNER_RADIUS.dp }
+    private val defaultPointerCornerRadius: Float by lazy { dimension.dpToPx(DEFAULT_CORNER_RADIUS) }
 
-    private val defaultTextSize: Float by lazy { DEFAULT_TEXT_SIZE.sp }
+    private val defaultTextSize: Float by lazy { dimension.spToPx(DEFAULT_TEXT_SIZE) }
 
     private val defaultTextFont: Int by lazy { R.font.display_regular }
 
@@ -81,16 +79,9 @@ class ViewAttributes {
         stripThickness = getStripThickness()
         textSize = getTextSize()
         fontFamily = getFontRes()
-        strategy = getStrategy()
       }
 
       typedAttributes?.recycle()
-    }
-
-    private fun getStrategy(): Strategy {
-      return with(typedAttributes?.getInt(R.styleable.ScopePickerView_mode, 2)) {
-        if (this == 1) SinglePickStrategy() else DuoPickStrategy()
-      }
     }
 
     private fun getPointerBackgroundColor(): Int {
@@ -158,4 +149,10 @@ class ViewAttributes {
       const val DEFAULT_TEXT_SIZE = 14f
     }
   }
+
+  /* planned in 1.1.0 */
+  class AttributesBuilder(
+    private val context: Context,
+    private val dimension: Dimension
+  ) {}
 }

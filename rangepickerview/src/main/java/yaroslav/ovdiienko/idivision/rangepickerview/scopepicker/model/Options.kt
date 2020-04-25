@@ -1,10 +1,11 @@
 package yaroslav.ovdiienko.idivision.rangepickerview.scopepicker.model
 
-import yaroslav.ovdiienko.idivision.rangepickerview.scopepicker.model.exceptions.MaxOptionCharactersSizeException
-import yaroslav.ovdiienko.idivision.rangepickerview.scopepicker.model.exceptions.MaxOptionsSizeException
+import yaroslav.ovdiienko.idivision.rangepickerview.util.exceptions.MaxOptionCharactersSizeException
+import yaroslav.ovdiienko.idivision.rangepickerview.util.exceptions.MaxOptionsSizeException
 
 
 data class Options(private val list: MutableList<String> = mutableListOf()) {
+
   fun addOption(option: String) {
     check(option)
     list.add(option)

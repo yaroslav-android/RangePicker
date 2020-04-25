@@ -21,10 +21,6 @@
         <attr name="textColorOnPoint" format="color" />
         <attr name="textColorOnSurface" />
         <attr name="pointerCornerRadius" format="dimension" />
-        <attr name="mode" format="enum">
-            <enum name="single" value="1" />
-            <enum name="dual" value="2" />
-        </attr>
         <attr name="stripThickness" />
         <attr name="android:textSize" />
         <attr name="android:fontFamily" />

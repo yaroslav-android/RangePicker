@@ -1,9 +1,9 @@
 package yaroslav.ovdiienko.idivision.rangepickerview.util.extension
 
 
-import yaroslav.ovdiienko.idivision.rangepickerview.scopepicker.ScopePickerView
+import android.view.View
 
 
-internal fun ScopePickerView.requestDisallowInterceptTouchEvent() {
+internal fun View.requestDisallowInterceptTouchEvent() {
   parent.requestDisallowInterceptTouchEvent(true)
 }

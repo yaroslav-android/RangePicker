@@ -1,4 +1,4 @@
-package yaroslav.ovdiienko.idivision.rangepickerview.scopepicker.model.exceptions
+package yaroslav.ovdiienko.idivision.rangepickerview.util.exceptions
 
 
 class MaxOptionsSizeException : RuntimeException {
