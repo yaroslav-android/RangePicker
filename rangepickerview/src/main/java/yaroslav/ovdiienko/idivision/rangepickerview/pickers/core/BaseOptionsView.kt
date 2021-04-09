@@ -112,16 +112,6 @@ abstract class BaseOptionsView @JvmOverloads constructor(
     canvas.drawRect(rightBound, paint)
   }
 
-  protected fun drawStrip(canvas: Canvas, startRect: RectF, endRect: RectF, paint: Paint) {
-    canvas.drawLine(
-      startRect.centerX(),
-      startRect.centerY(),
-      endRect.centerX(),
-      endRect.centerY(),
-      paint
-    )
-  }
-
   protected fun drawChip(canvas: Canvas, rect: RectF, paint: Paint) {
     paint.color = viewAttributes.pointerBackgroundColor
 

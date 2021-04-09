@@ -3,6 +3,7 @@ package yaroslav.ovdiienko.idivision.rangepickerview.pickers
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
+import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.MotionEvent
 import yaroslav.ovdiienko.idivision.rangepickerview.pickers.core.BaseOptionsView
@@ -124,6 +125,16 @@ class DuoOptionView @JvmOverloads constructor(
     canvas.restore()
 
     debugDraw { drawHelpingRectangles(canvas, chipToMove, debugPointPaint) }
+  }
+
+  private fun drawStrip(canvas: Canvas, startRect: RectF, endRect: RectF, paint: Paint) {
+    canvas.drawLine(
+      startRect.centerX(),
+      startRect.centerY(),
+      endRect.centerX(),
+      endRect.centerY(),
+      paint
+    )
   }
 
   override fun handleActionDown(event: MotionEvent) {
