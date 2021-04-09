@@ -6,7 +6,11 @@ import android.graphics.RectF
 
 data class State(
   var textCoordinates: RectF = RectF(),
-  var textPosition: Int = -1,
   var textBounds: Rect = Rect(),
+  var position: Int = UNDEFINED,
   var isSelected: Boolean = false
-)
+) {
+  companion object {
+    const val UNDEFINED = -1
+  }
+}

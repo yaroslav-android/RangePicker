@@ -6,7 +6,6 @@ interface UiModificationsAgreement {
   fun reset(withAnimation: Boolean = true)
 
   // Planned:
-  // ShapeDrawable support?
   // fun setStripColor(color: Int)
   // fun setSelectedBoxColor(color: Int)
   // fun setSelectedTextColor(color: Int)

@@ -1,4 +1,4 @@
-package yaroslav.ovdiienko.idivision.rangepickerview.pickers.core
+package yaroslav.ovdiienko.idivision.rangepickerview.pickers.core.model
 
 import android.graphics.Rect
 import android.graphics.RectF
@@ -28,6 +28,8 @@ class RectA : RectF {
   fun setLeft(value: Float) {
     this.left = value
   }
+
+  fun intersects(r: RectF) = intersects(r.left, r.top, r.right, r.bottom)
 
   companion object {
     const val LEFT = "left"

@@ -18,7 +18,7 @@ import android.view.View
 import android.view.ViewConfiguration
 import android.view.WindowManager
 import android.view.animation.AccelerateDecelerateInterpolator
-import yaroslav.ovdiienko.idivision.rangepickerview.pickers.core.RectA
+import yaroslav.ovdiienko.idivision.rangepickerview.pickers.core.model.RectA
 import yaroslav.ovdiienko.idivision.rangepickerview.rangepicker.model.Option
 import yaroslav.ovdiienko.idivision.rangepickerview.rangepicker.model.RectShape
 import yaroslav.ovdiienko.idivision.rangepickerview.rangepicker.model.enums.AnimatedRectProperties

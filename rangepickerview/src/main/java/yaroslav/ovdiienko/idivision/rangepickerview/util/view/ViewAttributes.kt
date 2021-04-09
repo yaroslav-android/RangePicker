@@ -45,7 +45,7 @@ class ViewAttributes {
     private val attrs: AttributeSet?
   ) {
     private val typedAttributes: TypedArray? =
-      context.obtainStyledAttributes(attrs, R.styleable.ScopePickerView)
+      context.obtainStyledAttributes(attrs, R.styleable.DuoOptionView)
 
     private val defaultPointerBackgroundColor: Int by lazy {
       ContextCompat.getColor(context, R.color.colorBlueSelectedPicker)
@@ -61,11 +61,11 @@ class ViewAttributes {
       ContextCompat.getColor(context, R.color.colorGreyBgPiker)
     }
 
-    private val defaultStripThickness: Float by lazy { dimension.dpToPx(DEFAULT_STROKE_WIDTH) }
+    private val defaultStripThickness: Float by lazy { dimension.toDp(DEFAULT_STROKE_WIDTH) }
 
-    private val defaultPointerCornerRadius: Float by lazy { dimension.dpToPx(DEFAULT_CORNER_RADIUS) }
+    private val defaultPointerCornerRadius: Float by lazy { dimension.toDp(DEFAULT_CORNER_RADIUS) }
 
-    private val defaultTextSize: Float by lazy { dimension.spToPx(DEFAULT_TEXT_SIZE) }
+    private val defaultTextSize: Float by lazy { dimension.toSp(DEFAULT_TEXT_SIZE) }
 
     private val defaultTextFont: Int by lazy { R.font.display_regular }
 
@@ -86,40 +86,40 @@ class ViewAttributes {
 
     private fun getPointerBackgroundColor(): Int {
       return parseColorRes(
-        R.styleable.ScopePickerView_pointerBackgroundColor,
+        R.styleable.DuoOptionView_pointerBackgroundColor,
         defaultPointerBackgroundColor
       )
     }
 
     private fun getStripBackgroundColor(): Int {
       return parseColorRes(
-        R.styleable.ScopePickerView_stripBackgroundColor,
+        R.styleable.DuoOptionView_stripBackgroundColor,
         defaultStripBackgroundColor
       )
     }
 
     private fun getTextColorOnPoint(): Int {
       return parseColorRes(
-        R.styleable.ScopePickerView_textColorOnPoint,
+        R.styleable.DuoOptionView_textColorOnPoint,
         defaultTextColorOnPoint
       )
     }
 
     private fun getTextColorOnSurface(): Int {
       return parseColorRes(
-        R.styleable.ScopePickerView_textColorOnSurface,
+        R.styleable.DuoOptionView_textColorOnSurface,
         defaultTextColorOnSurface
       )
     }
 
     private fun getPointerCornerRadius() =
       parseDimensionRes(
-        R.styleable.ScopePickerView_pointerCornerRadius,
+        R.styleable.DuoOptionView_pointerCornerRadius,
         defaultPointerCornerRadius
       )
 
     private fun getStripThickness() =
-      parseDimensionRes(R.styleable.ScopePickerView_stripThickness, defaultStripThickness)
+      parseDimensionRes(R.styleable.DuoOptionView_stripThickness, defaultStripThickness)
 
     private fun getTextSize() =
       parseDimensionRes(R.styleable.RangePickerView_android_textSize, defaultTextSize)
@@ -143,10 +143,10 @@ class ViewAttributes {
       typedAttributes?.getDimension(styleableResId, defaultDimension) ?: defaultDimension
 
     companion object {
-      const val DEFAULT_MIN_HEIGHT = 58f
-      const val DEFAULT_CORNER_RADIUS = 74f
+      const val DEFAULT_MIN_HEIGHT = 46f
+      const val DEFAULT_CORNER_RADIUS = 8f
       const val DEFAULT_STROKE_WIDTH = 32f
-      const val DEFAULT_TEXT_SIZE = 14f
+      const val DEFAULT_TEXT_SIZE = 12f
     }
   }
 

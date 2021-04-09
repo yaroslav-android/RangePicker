@@ -1,6 +1,7 @@
 package yaroslav.ovdiienko.idivision.rangepickerview.util
 
 import android.util.DisplayMetrics
+import android.util.TypedValue
 import android.view.WindowManager
 import kotlin.math.max
 import kotlin.math.min
@@ -13,17 +14,9 @@ class DisplayUtils(private val windowManager: WindowManager) : Dimension {
     windowManager.defaultDisplay.getMetrics(displayMetrics)
   }
 
-  override fun toDp(dp: Float) = multiply(displayMetrics.density, dp)
+  override fun toDp(dp: Float) = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, displayMetrics)
 
-  override fun dpToPx(px: Float) = divide(displayMetrics.density, px)
-
-  override fun toSp(sp: Float) = multiply(displayMetrics.scaledDensity, sp)
-
-  override fun spToPx(px: Float) = divide(displayMetrics.scaledDensity, px)
-
-  private fun divide(metrics: Float, value: Float) = (value / metrics + 0.5f)
-
-  private fun multiply(metrics: Float, value: Float) = (value * metrics + 0.5f)
+  override fun toSp(sp: Float) = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp, displayMetrics)
 
   override fun getMinWidthValue(): Int {
     val display = windowManager.defaultDisplay
