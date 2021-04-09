@@ -7,7 +7,6 @@ import android.os.Build
 import android.util.Log
 import androidx.core.content.res.ResourcesCompat
 import yaroslav.ovdiienko.idivision.rangepickerview.BuildConfig
-import yaroslav.ovdiienko.idivision.rangepickerview.util.debug.DebugFlags
 
 
 internal fun buildVersionGE(version: Int): Boolean = Build.VERSION.SDK_INT >= version
@@ -38,5 +37,5 @@ internal fun Any.debugAction(action: () -> Unit) {
 }
 
 internal fun Any.debugDraw(action: () -> Unit) {
-  if (DebugFlags.shouldShowHelperDrawings) action.invoke()
+  if (BuildConfig.DEBUG) action.invoke()
 }

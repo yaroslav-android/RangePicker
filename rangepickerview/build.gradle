@@ -47,36 +47,8 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
     // Android libs
+    // Android libs
     implementation 'androidx.appcompat:appcompat:1.2.0'
-
-    // Hyperion
-    def hyperionVersion = '0.9.29'
-    debugImplementation("com.willowtreeapps.hyperion:hyperion-core:$hyperionVersion") {
-        exclude module: 'support-annotations'
-        exclude module: 'support-v4'
-        exclude module: 'support-v13'
-        exclude module: 'recyclerview-v7'
-        exclude module: 'appcompat-v7'
-        exclude module: 'design'
-    }
-    debugImplementation("com.willowtreeapps.hyperion:hyperion-attr:$hyperionVersion") {
-        exclude module: 'support-annotations'
-        exclude module: 'support-v4'
-        exclude module: 'support-v13'
-        exclude module: 'recyclerview-v7'
-        exclude module: 'appcompat-v7'
-        exclude module: 'design'
-    }
-    debugImplementation("com.willowtreeapps.hyperion:hyperion-measurement:$hyperionVersion") {
-        exclude module: 'support-annotations'
-        exclude module: 'support-v4'
-        exclude module: 'support-v13'
-        exclude module: 'recyclerview-v7'
-        exclude module: 'appcompat-v7'
-        exclude module: 'design'
-    }
-
-    kapt 'com.google.auto.service:auto-service:1.0-rc6'
 
     testImplementation 'junit:junit:4.12'
     testImplementation 'androidx.test:core:1.2.0'
