@@ -1,6 +1,6 @@
 apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'com.github.dcendents.android-maven'
 group = 'com.github.yaroslav-android'
@@ -22,6 +22,11 @@ android {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            minifyEnabled false
+            testCoverageEnabled false
+            debuggable true
         }
     }
 
@@ -45,7 +50,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
 
     // Hyperion
-    def hyperionVersion = '0.9.27'
+    def hyperionVersion = '0.9.29'
     debugImplementation("com.willowtreeapps.hyperion:hyperion-core:$hyperionVersion") {
         exclude module: 'support-annotations'
         exclude module: 'support-v4'

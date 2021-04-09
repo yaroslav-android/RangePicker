@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.google.android.material.button.MaterialButton
+    <Button
         android:id="@+id/mbDebugDrawings"
         android:layout_width="match_parent"
         android:layout_height="56dp"
