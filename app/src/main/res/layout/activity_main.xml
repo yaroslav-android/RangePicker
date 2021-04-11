@@ -29,11 +29,11 @@
         app:backgroundSelectedTint="@color/colorPrimary"
         app:cornerRadius="5dp" />
 
-    <yaroslav.ovdiienko.idivision.rangepickerview.scopepicker.ScopePickerView
-        android:id="@+id/spv"
+    <yaroslav.ovdiienko.idivision.rangepickerview.pickers.DuoOptionView
+        android:id="@+id/dov"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp" />
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp" />
 </LinearLayout>
 

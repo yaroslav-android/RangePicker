@@ -18,7 +18,7 @@ import android.view.View
 import android.view.ViewConfiguration
 import android.view.WindowManager
 import android.view.animation.AccelerateDecelerateInterpolator
-import yaroslav.ovdiienko.idivision.rangepickerview.scopepicker.model.AnimationRect
+import yaroslav.ovdiienko.idivision.rangepickerview.pickers.core.model.RectA
 import yaroslav.ovdiienko.idivision.rangepickerview.rangepicker.model.Option
 import yaroslav.ovdiienko.idivision.rangepickerview.rangepicker.model.RectShape
 import yaroslav.ovdiienko.idivision.rangepickerview.rangepicker.model.enums.AnimatedRectProperties
@@ -34,15 +34,16 @@ import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 
-@Deprecated("RangePickerView is no more valid. Please replace it with ScopePikerView.")
+/* Will be dropped in 2.0.0 */
+@Deprecated("RangePickerView is no more valid. Please replace it with another picker.")
 class RangePickerView : View {
     private val rectangleBackgroundPaint: Paint = Paint()
     private val lineBackgroundPaint: Paint = Paint()
     private val textPaint: Paint = Paint()
     private val firstSelectedRect =
-        AnimationRect()
+        RectA()
     private val secondSelectedRect =
-        AnimationRect()
+        RectA()
     private val viewBounds = Rect()
 
     private var backgroundSelectedTint: Int = 0
@@ -673,7 +674,7 @@ class RangePickerView : View {
 
     private fun getObjectAnimation(
         property: AnimatedRectProperties,
-        oldRect: AnimationRect,
+        oldRect: RectA,
         rect: RectF,
         duration: Long,
         listener: ValueAnimator.AnimatorUpdateListener? = null
