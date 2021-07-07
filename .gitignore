@@ -47,7 +47,14 @@ captures/
 .idea/runConfigurations.xml
 .idea/misc.xml
 .idea/inspectionProfiles
+.idea/markdown-navigator-enh.xml
+.idea/markdown-navigator.xml
 .idea/codeStyles
+.idea/codeStyles/Project.xml
+.idea/compiler.xml
+.idea/jarRepositories.xml
+
+≈codeStyles
 
 # Android Studio 3 in .gitignore file.
 .idea/caches

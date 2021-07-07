@@ -1,13 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <attr name="textColorOnSurface" format="color" />
+    <attr name="stripThickness" format="dimension" />
+    <attr name="pointerBackgroundColor" format="color" />
+    <attr name="stripBackgroundColor" format="color" />
+    <attr name="textColorOnPoint" format="color" />
+    <attr name="pointerCornerRadius" format="dimension" />
+
     <declare-styleable name="RangePickerView">
         <attr name="backgroundSelectedTint" format="color" />
         <attr name="backgroundStripTint" format="color" />
         <attr name="textColorOnSelected" format="color" />
-        <attr name="textColorOnSurface" format="color" />
+        <attr name="textColorOnSurface" />
         <attr name="cornerRadius" format="dimension" />
-        <attr name="stripThickness" format="dimension" />
+        <attr name="stripThickness" />
         <attr name="extraPadding" format="dimension" />
+        <attr name="android:textSize" />
+        <attr name="android:fontFamily" />
+    </declare-styleable>
+
+    <declare-styleable name="DuoOptionView">
+        <attr name="pointerBackgroundColor" />
+        <attr name="stripBackgroundColor" />
+        <attr name="textColorOnPoint" />
+        <attr name="textColorOnSurface" />
+        <attr name="pointerCornerRadius" />
+        <attr name="stripThickness" />
         <attr name="android:textSize" />
         <attr name="android:fontFamily" />
     </declare-styleable>

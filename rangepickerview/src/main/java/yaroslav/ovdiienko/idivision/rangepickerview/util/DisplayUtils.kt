@@ -1,68 +1,50 @@
 package yaroslav.ovdiienko.idivision.rangepickerview.util
 
 import android.util.DisplayMetrics
+import android.util.TypedValue
 import android.view.WindowManager
+import kotlin.math.max
+import kotlin.math.min
 
 
-class DisplayUtils(private val windowManager: WindowManager) {
-    private val displayMetrics: DisplayMetrics = DisplayMetrics()
+class DisplayUtils(private val windowManager: WindowManager) : Dimension {
+  private val displayMetrics: DisplayMetrics = DisplayMetrics()
 
-    init {
-        windowManager.defaultDisplay.getMetrics(displayMetrics)
-    }
+  init {
+    windowManager.defaultDisplay.getMetrics(displayMetrics)
+  }
 
-    fun convertDpToPx(dp: Int): Int {
-        val scale = displayMetrics.density
-        return (dp * scale + 0.5f).toInt()
-    }
+  override fun toDp(dp: Float) = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, displayMetrics)
 
-    fun convertDpToPxFloat(dp: Float): Int {
-        val scale = displayMetrics.density
-        return (dp * scale + 0.5f).toInt()
-    }
+  override fun toSp(sp: Float) = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp, displayMetrics)
 
-    fun convertPxToDp(px: Int): Int {
-        val scale = displayMetrics.density
-        return (px / scale + 0.5f).toInt()
-    }
+  override fun getMinWidthValue(): Int {
+    val display = windowManager.defaultDisplay
+    val metrics = DisplayMetrics()
+    display.getMetrics(metrics)
+    val heightPixels = metrics.heightPixels
+    val widthPixels = metrics.widthPixels
+    return min(heightPixels, widthPixels)
+  }
 
-    fun convertSpToPx(sp: Int): Int {
-        val scale = displayMetrics.scaledDensity
-        return (sp * scale + 0.5f).toInt()
-    }
+  override fun getMaxWidthValue(): Int {
+    val display = windowManager.defaultDisplay
+    val metrics = DisplayMetrics()
+    display.getMetrics(metrics)
+    return max(metrics.heightPixels, metrics.widthPixels)
+  }
 
-    fun convertPxToSp(px: Int): Int {
-        val scale = displayMetrics.scaledDensity
-        return (px / scale + 0.5f).toInt()
-    }
+  override fun getScreenHeight(): Int {
+    val display = windowManager.defaultDisplay
+    val metrics = DisplayMetrics()
+    display.getMetrics(metrics)
+    return metrics.heightPixels
+  }
 
-    fun getMinWidthValue(): Int {
-        val display = windowManager.defaultDisplay
-        val metrics = DisplayMetrics()
-        display.getMetrics(metrics)
-        val heightPixels = metrics.heightPixels
-        val widthPixels = metrics.widthPixels
-        return Math.min(heightPixels, widthPixels)
-    }
-
-    fun getMaxWidthValue(): Int {
-        val display = windowManager.defaultDisplay
-        val metrics = DisplayMetrics()
-        display.getMetrics(metrics)
-        return Math.max(metrics.heightPixels, metrics.widthPixels)
-    }
-
-    fun getHeightActivity(): Int {
-        val display = windowManager.defaultDisplay
-        val metrics = DisplayMetrics()
-        display.getMetrics(metrics)
-        return metrics.heightPixels
-    }
-
-    fun getWidthActivity(): Int {
-        val display = windowManager.defaultDisplay
-        val metrics = DisplayMetrics()
-        display.getMetrics(metrics)
-        return metrics.widthPixels
-    }
+  override fun getScreenWidth(): Int {
+    val display = windowManager.defaultDisplay
+    val metrics = DisplayMetrics()
+    display.getMetrics(metrics)
+    return metrics.widthPixels
+  }
 }

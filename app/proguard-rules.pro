@@ -19,3 +19,28 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+-keep class com.google.**
+-dontwarn com.google.**	-dontwarn com.google.**
+
+-keep class **.R$* {
+    <fields>;	    <fields>;
+}
+
+-keep public class * extends java.lang.Exception
+
+-dontwarn kotlin.Unit
+
+-dontwarn javax.annotation.**
+
+-keep class com.squareup.picasso.** { *; }
+
+-keep class * implements com.willowtreeapps.hyperion.plugin.v1.Plugin {
+  *;
+}
+-keep class * implements com.willowtreeapps.hyperion.plugin.v1.PluginModule {
+  *;
+}
+-keep class * implements com.willowtreeapps.hyperion.attr.collectors.TypedAttributeCollector {
+  <init>();
+}

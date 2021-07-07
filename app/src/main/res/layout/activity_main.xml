@@ -8,16 +8,6 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <yaroslav.ovdiienko.idivision.rangepickerview.rangepicker.RangePickerView
-        android:id="@+id/picker"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginRight="8dp"
-        app:backgroundSelectedTint="@color/colorPrimary"
-        app:cornerRadius="5dp" />
-
     <Button
         android:id="@+id/btn_get_values"
         android:layout_width="wrap_content"
@@ -25,6 +15,25 @@
         android:layout_gravity="right"
         android:layout_marginTop="16dp"
         android:layout_marginRight="16dp"
-        android:text="get" />
+        android:text="get"
+        android:visibility="gone" />
+
+    <yaroslav.ovdiienko.idivision.rangepickerview.rangepicker.RangePickerView
+        android:id="@+id/picker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginRight="8dp"
+        android:visibility="gone"
+        app:backgroundSelectedTint="@color/colorPrimary"
+        app:cornerRadius="5dp" />
+
+    <yaroslav.ovdiienko.idivision.rangepickerview.pickers.DuoOptionView
+        android:id="@+id/dov"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp" />
 </LinearLayout>
 
