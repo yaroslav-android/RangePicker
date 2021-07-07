@@ -1,3 +1,4 @@
+## @Deprecated - use ScopePicker insted.
 # RangePicker [![](https://jitpack.io/v/yaroslav-android/RangePicker.svg)](https://jitpack.io/#yaroslav-android/RangePicker)
 <p align="center">
 	<kbd>
